@@ -25,9 +25,18 @@
 }
 
 .nav__link {
+  text-decoration: none;
   display: flex;
   flex-direction: row;
   gap: 8px;
   align-items: center;
   border-radius: 40px;
+}
+
+.logo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: min-content;
 }

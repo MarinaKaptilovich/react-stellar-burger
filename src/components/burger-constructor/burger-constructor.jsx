@@ -11,8 +11,8 @@ import { ingredientPropType } from "../../utils/prop-types";
 function BurgerConstructor({ data }) {
     const bun = data.filter(ingridient => ingridient.type === 'bun');
     const ingredients = data.filter(ingridient => ingridient.type === 'main');
-    const totalPrice = ingredients.reduce((sum, item) => {return sum + item.price}, 0) + bun.reduce((sum, item) => {return sum + item.price}, 0);
-    
+    const totalPrice = ingredients.reduce((s, {price}) =>  s + price, 2*bun[0].price);
+
     return(
       <section className={`mt-25 ${styles.section}`}>
           <ConstructorElement

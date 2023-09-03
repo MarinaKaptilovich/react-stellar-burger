@@ -1,26 +1,7 @@
-import React from 'react';
-import { 
-    Tab,
-    Counter,
-    CurrencyIcon 
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import {useState} from 'react';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingridients.module.css';
-import { ingredientPropType } from '../../utils/prop-types';
-
-function Ingredient({ name, amount, price, image }) {
-    return (
-        <div className={styles.card}>
-            {amount && <Counter count={amount} />}
-            <img src={image} alt={name} className="pl-4 pr-4" />
-            <p className={`text text_type_digits-default ${styles.price}`}>{price} <CurrencyIcon /></p>
-            <p className={`text text_type_main-default ${styles.name}`} >{name}</p>
-        </div>
-    )
-}
-  
-Ingredient.propTypes = {
-    data: ingredientPropType
-}; 
+import Ingredient from '../ingredient/ingredient';
 
 function BurgerIngredients({ data }) {
     const categories = [
@@ -29,7 +10,7 @@ function BurgerIngredients({ data }) {
         {main: 'Начинки'}
     ];
   
-    const [currentTab, setCurrentTab] = React.useState(Object.keys(categories[0])[0]);
+    const [currentTab, setCurrentTab] = useState(Object.keys(categories[0])[0]);
   
     return (
         <section className={`pt-10 main-block ${styles.section}`}>
