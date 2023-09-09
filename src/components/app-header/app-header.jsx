@@ -13,8 +13,6 @@ const NavLink = (props) => (
     </a>
 )
 
-
-
 function AppHeader() {
     return (
         <header className={`pt-4 pb-4 ${styles.header}`}>
