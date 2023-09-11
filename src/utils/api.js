@@ -1,18 +1,16 @@
-const config = {
-    url: 'https://norma.nomoreparties.space/api/ingredients',
+export const getIngredients = async (url) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData);
+    }
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
-  
-  async function requestApi(url, requestMethod) {
-    return fetch(`${url}`, {
-      method: requestMethod,
-    })
-    .then(res => checkResult(res))
-  }
-  
-  function checkResult(res) {
-    return res.ok ? res.json() : Promise.reject('Error: ', res.status);
-  }
-  
-  export function getIngredients(){
-    return requestApi(config.url, 'GET');
-  }
+};
+
+export const api = 'https://norma.nomoreparties.space/api/ingredients';

@@ -24,9 +24,7 @@
 
 .total_price {
   margin: 40px 16px 52px 0;
-  height: 64px;
   display: flex;
-  flex-direction: row;
   align-items: center;
   align-self: flex-end;
   gap: 40px;

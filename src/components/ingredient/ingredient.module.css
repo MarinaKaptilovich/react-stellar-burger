@@ -5,6 +5,7 @@
     justify-content: flex-start;
     position: relative;
     width: 272px;
+    cursor: pointer;
   }
     
   .price {

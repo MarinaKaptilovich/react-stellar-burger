@@ -1,9 +1,11 @@
 import {useState} from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './burger-ingridients.module.css';
+import styles from './burger-ingredients.module.css';
 import Ingredient from '../ingredient/ingredient';
+import { ingredientPropType } from '../../utils/prop-types';
+import PropTypes from "prop-types";
 
-function BurgerIngredients({ data }) {
+function BurgerIngredients({ ingredients, onModalOpen }) {
     const categories = [
         {bun: 'Булки'},
         {sauce: 'Соусы'},
@@ -29,8 +31,8 @@ function BurgerIngredients({ data }) {
                 <div key={categoryName}>
                     <h2 className="text text_type_main-large">{category[categoryName]}</h2>
                     <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
-                    {data.filter(ingredient => ingredient.type === categoryName).map(ingredient => (
-                        <Ingredient key={ingredient._id} image={ingredient.image} price={ingredient.price} name ={ingredient.name} amount={1} />
+                    {ingredients.filter(ingredient => ingredient.type === categoryName).map(ingredient => (
+                        <Ingredient key={ingredient._id} ingredient={ingredient} amount={1} onModalOpen={onModalOpen} />
                     ))}
                     </div>
                 </div>
@@ -41,4 +43,9 @@ function BurgerIngredients({ data }) {
     )
 }
 
-export default BurgerIngredients
+BurgerIngredients.propTypes = {
+    ingridients: PropTypes.arrayOf(ingredientPropType).isRequired,
+    onModalOpen: PropTypes.func.isRequired
+}
+
+export default BurgerIngredients;

@@ -1,94 +1,77 @@
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import BurgerIngredients from "../burger-ingridients/burger-ingridients";
+import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
-import { getIngredients } from "../../utils/api";
+import { getIngredients, api } from "../../utils/api";
 import { 
   useEffect,
   useState
 } from "react"
 
 function App() {
+  const [ingredients, setIngredients] = useState([]);
   const [error, setError] = useState(null);
-  const [modal, setModal] = useState(
-    {
-      type: '',
-      isActive: false,
-      ingredient: {},
-    }
-  );
+  const [modalIngredient, setModalIngredient] = useState(null);
+  const [isIngredientModalOpen, setIsIngredientModalOpen] = useState(false);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
-  const [data, setData] = useState(
-    {
-      ingredients: [],
-      isLoaded: false,
-    }
-  );
+  const openIngredientModal = (ingredient) => {
+    setModalIngredient(ingredient);
+    setIsIngredientModalOpen(true);
+  };
+  
+  const closeIngredientModal = () => {
+    setIsIngredientModalOpen(false);
+  };
+  
+  const openOrderModal = () => {
+    setIsOrderModalOpen(true);
+  };
+  
+  const closeOrderModal = () => {
+    setIsOrderModalOpen(false);
+  };
 
-  const handleCloseModal = () => {
-    setModal(
-      {
-        ...modal,
-        isActive: false,
-      }
-    );
-  }
-
-  const handleOpenModal = (modalType, item = {}) => {
-    switch (modalType) {
-      case 'submit':
-        setModal(
-          {
-            ...modal,
-            type: 'order__details',
-            isActive: true,
-          }
-        );
-        break;
-      case 'ingredient':
-        setModal(
-          {
-            ...modal,
-            type: 'ingredient__details',
-            isActive: true,
-            ingredient: item,
-          }
-        );
-        break;
-      default: 
-        break;
-    }
-  }
-   
   useEffect(() => {
-    setData({...data, loading: true});
-    getIngredients()
-      .then(res => {
-        setData({ ...data, ingredients: [...res.data], isLoaded: true});
-        })
-      .catch(err => {
-        setError(err.message);
-        console.log('Error: ', error);
-        })
-  }, []);
+    getIngredients(api)
+    .then(ingredients => {
+      setIngredients(ingredients.data); 
+    })
+    .catch(error => {
+      setError(error); 
+    });
+}, []); 
 
   return (
-    <div>
-      <AppHeader />
-      <main className={`${styles.app}`}>
-        {data.isLoaded && <BurgerIngredients data={ data.ingredients } onModalOpen={handleOpenModal} />}
-        {data.isLoaded && <BurgerConstructor data={ data.ingredients } onModalOpen={handleOpenModal} />}
-      </main>
-      {modal.isActive &&
-        <Modal onCloseModal={handleCloseModal}>
-          {modal.type === 'order__details' && <OrderDetails />}
-          {modal.type === 'ingredient__details' && <IngredientDetails ingredient={modal.ingredient} />}
-        </Modal>
-      }
-    </div>
+    <>
+    <AppHeader />
+    <main className={styles.app}>
+      {ingredients.length > 0 && (
+      <>
+        <BurgerIngredients ingredients={ingredients} onModalOpen={openIngredientModal} />
+        <BurgerConstructor data={ingredients} onModalOpen={openOrderModal} />
+      </>
+      )}
+    </main>
+    {modalIngredient && (
+      <Modal
+        title="Детали ингредиента"
+        toggle={closeIngredientModal}
+        opened={isIngredientModalOpen}
+      >
+        <IngredientDetails ingredient={modalIngredient} />
+      </Modal>
+    )}
+
+    {isOrderModalOpen && (
+      <Modal toggle={closeOrderModal} opened={isOrderModalOpen}>
+        <OrderDetails />
+      </Modal>
+    )}
+    </>
   );
 }
 

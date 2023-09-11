@@ -1,20 +1,18 @@
-.ingredient {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-  
-.stats {
+.ingredients {
   display: grid;
-  justify-items: center;
-  grid-template-columns: repeat(4, 1fr);
+  width: 516px;
+  grid-template-columns: 120px repeat(3, 112px);
   gap: 20px;
-  list-style: none;
+  justify-items: center;
+  text-align: center;
 }
-  
-.stat {
-  width: max-content;
+
+.value {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  width: 640px;
 }

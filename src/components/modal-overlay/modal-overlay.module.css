@@ -14,6 +14,7 @@
   opacity: 1;
 }
 
-.overlay_hidden {
+.hidden {
   visibility: hidden;
+  opacity: 0;
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 import { 
     Button, 
     ConstructorElement, 
@@ -8,7 +8,7 @@ import {
 import styles from './burger-constructor.module.css';
 import { ingredientPropType } from "../../utils/prop-types";
 
-function BurgerConstructor({ data }) {
+function BurgerConstructor({ data, onModalOpen }) {
     const bun = data.filter(ingridient => ingridient.type === 'bun');
     const ingredients = data.filter(ingridient => ingridient.type === 'main');
     const totalPrice = ingredients.reduce((s, {price}) =>  s + price, 2*bun[0].price);
@@ -48,7 +48,7 @@ function BurgerConstructor({ data }) {
             {totalPrice}
             <span className='ml-2'><CurrencyIcon type='primary' /></span>
           </p>
-          <Button htmlType="button" type="primary" size="large">
+          <Button onClick={() => onModalOpen('submit')} htmlType="button" type="primary" size="large">
             Оформить заказ
           </Button>
         </div>
@@ -57,7 +57,8 @@ function BurgerConstructor({ data }) {
 }
 
 BurgerConstructor.propTypes = {
-  data: ingredientPropType
+  data: ingredientPropType,
+  onModalOpen: PropTypes.func.isRequired
 }; 
 
 export default BurgerConstructor;
