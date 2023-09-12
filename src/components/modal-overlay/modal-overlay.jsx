@@ -2,10 +2,16 @@ import PropTypes from "prop-types";
 import styles from "./modal-overlay.module.css"
 
 function ModalOverlay({ children, opened, toggle }) {
+  const overlayClickHandler = () => {
+    if (opened) {
+      toggle(); 
+    }
+  };
+
   return (
     <section 
       className={`${styles.overlay} ${!opened && styles.hidden}`}
-      onClick={toggle}
+      onClick={overlayClickHandler}
     >
       {children}
     </section>

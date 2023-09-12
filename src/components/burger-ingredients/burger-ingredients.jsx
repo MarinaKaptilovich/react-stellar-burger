@@ -44,7 +44,7 @@ function BurgerIngredients({ ingredients, onModalOpen }) {
 }
 
 BurgerIngredients.propTypes = {
-    ingridients: PropTypes.arrayOf(ingredientPropType).isRequired,
+    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
     onModalOpen: PropTypes.func.isRequired
 }
 

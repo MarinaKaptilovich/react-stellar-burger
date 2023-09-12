@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useMemo } from "react";
 import { 
     Button, 
     ConstructorElement, 
@@ -9,9 +10,9 @@ import styles from './burger-constructor.module.css';
 import { ingredientPropType } from "../../utils/prop-types";
 
 function BurgerConstructor({ data, onModalOpen }) {
-    const bun = data.filter(ingridient => ingridient.type === 'bun');
-    const ingredients = data.filter(ingridient => ingridient.type === 'main');
-    const totalPrice = ingredients.reduce((s, {price}) =>  s + price, 2*bun[0].price);
+    const bun = useMemo(() => data.filter(ingridient => ingridient.type === 'bun'));
+    const ingredients = useMemo(() => data.filter(ingridient => ingridient.type === 'main'));
+    const totalPrice = useMemo(() => ingredients.reduce((s, {price}) =>  s + price, 2*bun[0].price));
 
     return(
       <section className={`mt-25 ${styles.section}`}>

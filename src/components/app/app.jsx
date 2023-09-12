@@ -56,7 +56,7 @@ function App() {
       </>
       )}
     </main>
-    {modalIngredient && (
+    {isIngredientModalOpen && (
       <Modal
         title="Детали ингредиента"
         toggle={closeIngredientModal}
