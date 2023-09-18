@@ -1,0 +1,20 @@
+.section {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ingredientsPanel {
+  overflow-y: scroll;
+}
+  
+.ingredients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+  
+.categories {
+  display: flex;
+  max-width: 600px;
+}

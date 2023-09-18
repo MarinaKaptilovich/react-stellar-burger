@@ -1,0 +1,31 @@
+.section {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.ingridients {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.ingridient {
+  width: 568px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+.total_price {
+  margin: 40px 16px 52px 0;
+  display: flex;
+  align-items: center;
+  align-self: flex-end;
+  gap: 40px;
+}
