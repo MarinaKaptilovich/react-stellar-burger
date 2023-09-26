@@ -1,3 +1,7 @@
+import {
+  useContext,
+  useMemo
+} from 'react';
 import { 
     Counter,
     CurrencyIcon 
@@ -5,18 +9,94 @@ import {
 import { ingredientPropType } from '../../utils/prop-types';
 import PropTypes from "prop-types";
 import styles from './ingredient.module.css';
+import { BurgerContext } from '../../services/app-context';
 
 function Ingredient({ ingredient, amount, onModalOpen }) {
-    const { name, price, image } = ingredient;
+  const dispatchBurger = useContext(BurgerContext);
 
-    return (
-        <div className={styles.card} onClick={() => onModalOpen(ingredient)}>
-          {amount && <Counter count={amount} />}
-          <img src={image} alt={name} className="pl-4 pr-4" />
-          <p className={`text text_type_digits-default ${styles.price}`}>{price} <CurrencyIcon /></p>
-          <p className={`text text_type_main-default ${styles.name}`} >{name}</p>
-        </div>
-    )
+  const buns = useMemo(() => ingredient.filter((item) => item.type === 'bun'), [ingredient]);
+  const mains = useMemo(() => ingredient.filter((item) => item.type === 'main'), [ingredient]);
+  const sauces = useMemo(() => ingredient.filter((item) => item.type === 'sause'), [ingredient]);
+
+  return (
+    <div>
+      <p className="text text_type_main-medium mb-6">
+        Булки
+      </p>
+      {
+        buns.map(item => (
+          <div 
+            className={styles.card}
+            key={item._id}
+            onClick={() => {
+              dispatchBurger({
+                type:  'addBun',
+                payload: item
+              })
+            }}
+          >
+            {amount && <Counter count={amount} />}
+            <img className="ml-4 mr-4" src={item.image} alt={item.name} />
+            <p className={`text text_type_digits-default ${styles.price}`}>
+              {item.price} 
+              <CurrencyIcon />
+            </p>
+            <p className={`text text_type_main-default ${styles.name}`} >{item.name}</p>
+          </div>
+        ))
+      }
+      <p className="text text_type_main-medium mt-10 mb-6">
+        Соусы
+      </p>
+      {
+        sauces.map(item => (
+          <div 
+            className={styles.card}
+            key={item._id}
+            onClick={() => {
+              dispatchBurger({
+                type:  'addIngredient',
+                payload: item
+              })
+            }}
+          >
+            {amount && <Counter count={amount} />}
+            <img className="ml-4 mr-4" src={item.image} alt={item.name} />
+            <p className={`text text_type_digits-default ${styles.price}`}>
+              {item.price} 
+              <CurrencyIcon />
+            </p>
+            <p className={`text text_type_main-default ${styles.name}`} >{item.name}</p>
+          </div>
+        ))
+      }
+      <p className="text text_type_main-medium mt-10 mb-6">
+        Начинки
+      </p>
+      {
+        mains.map(item => (
+          <div 
+            className={styles.card}
+            key={item._id}
+            onClick={() => {
+              dispatchBurger({
+                type:  'addIngredient',
+                payload: item
+              })
+            }}
+          >
+            {amount && <Counter count={amount} />}
+            <img className="ml-4 mr-4" src={item.image} alt={item.name} />
+            <p className={`text text_type_digits-default ${styles.price}`}>
+              {item.price} 
+              <CurrencyIcon />
+            </p>
+            <p className={`text text_type_main-default ${styles.name}`} >{item.name}</p>
+          </div>
+        ))
+      }
+    </div>
+  )
 }
   
 Ingredient.propTypes = {
