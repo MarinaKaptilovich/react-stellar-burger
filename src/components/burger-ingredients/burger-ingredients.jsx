@@ -34,15 +34,16 @@ function BurgerIngredients({ ingredients, onModalOpen }) {
               Булки
             </p>
             <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
-              {buns.map(item => (
+              {buns.map((ingredient, index)=> (
                 <Ingredient
-                  key={item._id}
-                  ingredient={item}
+                  key={index}
+                  ingredient={ingredient}
                   amount={1}
                   onModalOpen={() => {
+                    onModalOpen(ingredient)
                     dispatchBurger({
                       type:  'addBun',
-                      payload: item
+                      payload: ingredient
                     })
                   }}
                 />
@@ -55,15 +56,16 @@ function BurgerIngredients({ ingredients, onModalOpen }) {
               Соусы
             </p>
             <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
-              {sauces.map(item => (
+              {sauces.map((ingredient, index) => (
                 <Ingredient
-                  key={item._id}
-                  ingredient={item}
+                  key={index}
+                  ingredient={ingredient}
                   amount={1}
                   onModalOpen={() => {
+                    onModalOpen(ingredient)
                     dispatchBurger({
                       type:  'addIngredient',
-                      payload: item
+                      payload: ingredient
                     })
                   }}
                 />
@@ -76,15 +78,16 @@ function BurgerIngredients({ ingredients, onModalOpen }) {
               Начинки
             </p>
             <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
-              {mains.map(item => (
+              {mains.map((ingredient, index)=> (
                 <Ingredient
-                  key={item._id}
-                  ingredient={item}
+                  key={index}
+                  ingredient={ingredient}
                   amount={1}
                   onModalOpen={() => {
+                    onModalOpen(ingredient)
                     dispatchBurger({
                       type:  'addIngredient',
-                      payload: item
+                      payload: ingredient
                     })
                   }}
                 />
