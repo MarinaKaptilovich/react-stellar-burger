@@ -11,6 +11,7 @@ import {
   useState
 } from "react";
 import { ContextProvider } from "../../services/app-context";
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const [ingredients, setIngredients] = useState({ingredients: [], hasError: false, errorMessage: ''});
@@ -38,7 +39,7 @@ function App() {
   useEffect(() => {
     getIngredients()
     .then(res => {
-      setIngredients({...ingredients, ingredients: [...res.data]}); 
+      setIngredients({...ingredients, key: uuidv4(), ingredients: [...res.data]}); 
     })
     .catch(error => {
       setIngredients({...ingredients, hasError: true, errorMessage: error}); 

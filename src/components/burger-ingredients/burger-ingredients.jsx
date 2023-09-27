@@ -11,12 +11,7 @@ import PropTypes from "prop-types";
 import { BurgerContext } from '../../services/app-context';
 
 function BurgerIngredients({ ingredients, onModalOpen }) {
-  const categories = [
-      {bun: 'Булки'},
-      {sauce: 'Соусы'},
-      {main: 'Начинки'}
-  ];
-  const [currentTab, setCurrentTab] = useState(Object.keys(categories[0])[0]);
+  const [currentTab, setCurrentTab] = useState('bun');
 
   const dispatchBurger = useContext(BurgerContext);
 
@@ -28,76 +23,75 @@ function BurgerIngredients({ ingredients, onModalOpen }) {
     <section className={`pt-10 main-block ${styles.section}`}>
       <h1 className="text text_type_main-large pb-5">Соберите бургер</h1>
       <div className={styles.categories}>
-        {categories.map(item => {
-          const id = Object.keys(item)[0]
-          const name = item[id]
-          return <Tab value={id} key={id} active={currentTab === id} onClick={setCurrentTab}>{name}</Tab>
-        })}
+        <Tab value="bun" active={currentTab === 'bun'} onClick={setCurrentTab}>Булки</Tab>
+        <Tab value="sauce" active={currentTab === 'sauce'} onClick={setCurrentTab}>Соусы</Tab>
+        <Tab value="main" active={currentTab === 'main'} onClick={setCurrentTab}>Начинки</Tab>
       </div>
       <div className={`custom-scroll pt-10 ${styles.ingredientsPanel}`}>
-        {categories.map(category => {
-          const categoryName = Object.keys(category)[0] 
-          return (
-            <>
-              <div key={categoryName}>
-                  <h2 className="text text_type_main-large">{category[categoryName]}</h2>
-                  <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
-                    {buns.map(item => (
-                      <Ingredient
-                        key={item._id}
-                        ingredient={item}
-                        amount={1}
-                        onModalOpen={() => {
-                          dispatchBurger({
-                            type:  'addBun',
-                            payload: item
-                          })
-                        }}
-                      />
-                    ))}
-                  </div>
-              </div>
+        <>
+          <div>
+            <p className="text text_type_main-medium mb-6">
+              Булки
+            </p>
+            <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
+              {buns.map(item => (
+                <Ingredient
+                  key={item._id}
+                  ingredient={item}
+                  amount={1}
+                  onModalOpen={() => {
+                    dispatchBurger({
+                      type:  'addBun',
+                      payload: item
+                    })
+                  }}
+                />
+              ))}
+            </div>
+          </div>
 
-              <div key={categoryName}>
-                <h2 className="text text_type_main-large">{category[categoryName]}</h2>
-                <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
-                  {sauces.map(item => (
-                    <Ingredient
-                      key={item._id}
-                      ingredient={item}
-                      amount={1}
-                      onModalOpen={() => {
-                        dispatchBurger({
-                          type:  'addIngredient',
-                          payload: item
-                        })
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
+          <div>
+            <p className="text text_type_main-medium mt-10 mb-6">
+              Соусы
+            </p>
+            <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
+              {sauces.map(item => (
+                <Ingredient
+                  key={item._id}
+                  ingredient={item}
+                  amount={1}
+                  onModalOpen={() => {
+                    dispatchBurger({
+                      type:  'addIngredient',
+                      payload: item
+                    })
+                  }}
+                />
+              ))}
+            </div>
+          </div>
 
-              <div key={categoryName}>
-                <h2 className="text text_type_main-large">{category[categoryName]}</h2>
-                <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
-                  {mains.map(item => (
-                    <Ingredient
-                      key={item._id}
-                      ingredient={item}
-                      amount={1}
-                      onModalOpen={() => {
-                        dispatchBurger({
-                          type:  'addIngredient',
-                          payload: item
-                        })
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </>   
-          )
-        })}
+          <div>
+            <p className="text text_type_main-medium mt-10 mb-6">
+              Начинки
+            </p>
+            <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
+              {mains.map(item => (
+                <Ingredient
+                  key={item._id}
+                  ingredient={item}
+                  amount={1}
+                  onModalOpen={() => {
+                    dispatchBurger({
+                      type:  'addIngredient',
+                      payload: item
+                    })
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </>   
       </div>
     </section>
   )
