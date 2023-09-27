@@ -49,9 +49,9 @@ function App() {
     <ContextProvider>
       <AppHeader />
       <main className={styles.app}>
-        {ingredients.isLoaded > 0 && (
+        {!ingredients.hasError && (
           <>
-            <BurgerIngredients ingredients={ingredients} onModalOpen={openIngredientModal} />
+            <BurgerIngredients ingredients={ingredients.ingredients} onModalOpen={openIngredientModal} />
             <BurgerConstructor onModalOpen={openOrderModal} />
           </>
         )}
@@ -68,7 +68,7 @@ function App() {
           toggle={closeIngredientModal}
           opened={isIngredientModalOpen}
         >
-          <IngredientDetails ingredient={modalIngredient.ingredient} />
+          <IngredientDetails ingredient={modalIngredient} />
         </Modal>
       )}
 

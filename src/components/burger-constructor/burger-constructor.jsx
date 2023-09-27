@@ -22,6 +22,7 @@ function BurgerConstructor({ onModalOpen }) {
 
   const bun = useMemo(() => burger.bun, [burger]);
   const ingredients = useMemo(() => burger.ingredients, [burger]);
+  
   const totalPrice = useMemo(() => {
     let bunPrice = 0;
     let ingredientsPrice = 0;
@@ -29,8 +30,8 @@ function BurgerConstructor({ onModalOpen }) {
       bunPrice = bun.price * 2;
     }
     if (ingredients) {
-      ingredientsPrice = ingredients.reduce((sum, item) => {
-        return sum + item.bunPrice
+      ingredientsPrice = ingredients.reduce((price, ingredient) => {
+        return price + ingredient.price
       }, 0)
     }
     return bunPrice + ingredientsPrice;

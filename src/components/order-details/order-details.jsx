@@ -4,12 +4,12 @@ import { OrderContext } from '../../services/app-context';
 import { useContext } from 'react';
 
 function OrderDetails() {
-  const orderNumber = useContext(OrderContext);
+  const order = useContext(OrderContext);
 
   return (
     <>
       <p className={`${styles.text_glow} text text_type_digits-large mt-30`}>
-        {orderNumber.order.number}
+        {order.order.number}
       </p>
       <h1 className="text text_type_main-medium mt-8">идентификатор заказа</h1>
       <img className={`${styles.done} mt-15`} src={image} alt="done" />
