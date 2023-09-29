@@ -1,6 +1,6 @@
-import PropTypes from "prop-types";
 import { 
   useMemo,
+  useState,
   useContext
 } from "react";
 import { 
@@ -15,6 +15,8 @@ import {
   OrderDispatchContext 
 } from "../../services/app-context";
 import { createOrder } from "../../utils/api";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
 
 function BurgerConstructor({ onModalOpen }) {
   const burger = useContext(ConstructorContext);
@@ -56,13 +58,23 @@ function BurgerConstructor({ onModalOpen }) {
           })
         })
         .then(res => {
-          onModalOpen()
+          openOrderModal()
         })
         .catch((err) => {
           console.log(err);
         })
     }
-  }
+  };
+
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+
+  const openOrderModal = () => {
+    setIsOrderModalOpen(true);
+  };
+  
+  const closeOrderModal = () => {
+    setIsOrderModalOpen(false);
+  };
 
   return(
     <section className={`mt-25 ${styles.section}`}>
@@ -112,12 +124,14 @@ function BurgerConstructor({ onModalOpen }) {
           Оформить заказ
         </Button>
       </div>
+      
+      {isOrderModalOpen && (
+        <Modal toggle={closeOrderModal} opened={isOrderModalOpen}>
+          <OrderDetails />
+        </Modal>
+      )}
     </section>
   );
 }
-
-BurgerConstructor.propTypes = {
-  onModalOpen: PropTypes.func.isRequired
-}; 
 
 export default BurgerConstructor;

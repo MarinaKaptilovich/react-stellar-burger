@@ -9,8 +9,10 @@ import Ingredient from '../ingredient/ingredient';
 import { ingredientPropType } from '../../utils/prop-types';
 import PropTypes from "prop-types";
 import { BurgerContext } from '../../services/app-context';
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 
-function BurgerIngredients({ ingredients, onModalOpen }) {
+function BurgerIngredients({ ingredients }) {
   const [currentTab, setCurrentTab] = useState('bun');
 
   const dispatchBurger = useContext(BurgerContext);
@@ -18,6 +20,19 @@ function BurgerIngredients({ ingredients, onModalOpen }) {
   const buns = useMemo(() => ingredients.filter((item) => item.type === 'bun'), [ingredients]);
   const mains = useMemo(() => ingredients.filter((item) => item.type === 'main'), [ingredients]);
   const sauces = useMemo(() => ingredients.filter((item) => item.type === 'sauce'), [ingredients]);
+
+  const [modalIngredient, setModalIngredient] = useState(null);
+  const [isIngredientModalOpen, setIsIngredientModalOpen] = useState(false);
+
+  const openIngredientModal = (ingredient) => {
+    setModalIngredient(ingredient);
+    setIsIngredientModalOpen(true);
+  };
+  
+  const closeIngredientModal = () => {
+    setIsIngredientModalOpen(false);
+  };
+
 
   return (
     <section className={`pt-10 main-block ${styles.section}`}>
@@ -40,7 +55,7 @@ function BurgerIngredients({ ingredients, onModalOpen }) {
                   ingredient={ingredient}
                   amount={1}
                   onModalOpen={() => {
-                    onModalOpen(ingredient)
+                    openIngredientModal(ingredient)
                     dispatchBurger({
                       type:  'addBun',
                       payload: ingredient
@@ -62,7 +77,7 @@ function BurgerIngredients({ ingredients, onModalOpen }) {
                   ingredient={ingredient}
                   amount={1}
                   onModalOpen={() => {
-                    onModalOpen(ingredient)
+                    openIngredientModal(ingredient)
                     dispatchBurger({
                       type:  'addIngredient',
                       payload: ingredient
@@ -84,7 +99,7 @@ function BurgerIngredients({ ingredients, onModalOpen }) {
                   ingredient={ingredient}
                   amount={1}
                   onModalOpen={() => {
-                    onModalOpen(ingredient)
+                    openIngredientModal(ingredient)
                     dispatchBurger({
                       type:  'addIngredient',
                       payload: ingredient
@@ -96,13 +111,22 @@ function BurgerIngredients({ ingredients, onModalOpen }) {
           </div>
         </>   
       </div>
+
+      {isIngredientModalOpen && (
+        <Modal
+          title="Детали ингредиента"
+          toggle={closeIngredientModal}
+          opened={isIngredientModalOpen}
+        >
+          <IngredientDetails ingredient={modalIngredient} />
+        </Modal>
+      )}
     </section>
   )
 }
 
 BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired, 
-    onModalOpen: PropTypes.func.isRequired
+    ingredients: PropTypes.arrayOf(ingredientPropType).isRequired
 }
 
 export default BurgerIngredients;
