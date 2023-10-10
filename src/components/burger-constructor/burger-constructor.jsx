@@ -1,70 +1,24 @@
 import { 
   useMemo,
-  useState,
-  useContext
+  useState 
 } from "react";
 import { 
-    Button, 
-    ConstructorElement, 
-    CurrencyIcon, 
-    DragIcon 
+  Button, 
+  ConstructorElement, 
+  CurrencyIcon, 
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-constructor.module.css';
-import { 
-  ConstructorContext, 
-  OrderDispatchContext 
-} from "../../services/app-context";
-import { createOrder } from "../../utils/api";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
+import { useSelector } from "react-redux";
+import { useDrop } from "react-dnd";
+import ConstructorItem from "../constructor-item/constructor-item";
+import { useActions } from "../../utils/use-actions";
+import { getOrder } from "../../services/order-details";
 
-function BurgerConstructor({ onModalOpen }) {
-  const burger = useContext(ConstructorContext);
-  const dispatchOrder = useContext(OrderDispatchContext);
-
-  const bun = useMemo(() => burger.bun, [burger]);
-  const ingredients = useMemo(() => burger.ingredients, [burger]);
-  
-  const totalPrice = useMemo(() => {
-    let bunPrice = 0;
-    let ingredientsPrice = 0;
-    if (bun) {
-      bunPrice = bun.price * 2;
-    }
-    if (ingredients) {
-      ingredientsPrice = ingredients.reduce((price, ingredient) => {
-        return price + ingredient.price
-      }, 0)
-    }
-    return bunPrice + ingredientsPrice;
-  },
-    [bun, ingredients]
-  );
-
-  function getIngredientsId(array) {
-    return array.reduce((total,item) => {
-      return [...total, item._id]
-    }, [])
-  };
-
-  const getOrder = () => {
-    const ingredientsId = getIngredientsId([bun, ...ingredients]);
-    if (ingredientsId.length > 0) {
-      createOrder(ingredientsId)
-        .then(res => {
-          dispatchOrder({
-            type: 'addOrder',
-            payload: res
-          })
-        })
-        .then(res => {
-          openOrderModal()
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    }
-  };
+export default function BurgerConstructor() {
+  const burgerData = useSelector(state => state.burgerData);
+  const { addBun, addFilling } = useActions();
 
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
@@ -76,47 +30,82 @@ function BurgerConstructor({ onModalOpen }) {
     setIsOrderModalOpen(false);
   };
 
+  const [, drop] = useDrop(() => ({
+    accept: 'ingredient',
+    drop: (item) => {
+      if (item.type === 'bun') {
+        addBun(item)
+      } else {
+        addFilling(item)
+      }
+    }
+  }));
+
+  const fillings = useMemo(() => burgerData.fillings, [burgerData]);
+  const bun = useMemo(() => burgerData.bun, [burgerData]);
+
+  const totalPrice = useMemo(() => {
+    let fillingsPrice = 0;
+    let bunPrice = 0;
+    if (fillings.length > 0) {
+      fillingsPrice = fillings.reduce((sum, item) => {return sum + item.price}, 0);
+    }
+    if (bun.length > 0) {
+      bunPrice = bun[0].price * 2;
+    }
+    return fillingsPrice + bunPrice;
+  }, [fillings, bun]);
+
+  const handleGetOrder = () => {
+    const totalIngredients = [...bun, ...fillings]
+    if (totalIngredients.length >= 1) {
+      getOrder(totalIngredients)
+      openOrderModal()
+    }
+  }
+
   return(
-    <section className={`mt-25 ${styles.section}`}>
-      {bun && (
-        <ConstructorElement
-          type="top"
-          text={bun.name + '' + '(верх)'}
-          price={bun.price}
-          thumbnail={bun.image}
-          isLocked={true}
-          extraClass='ml-8 mr-2'
-        />
-      )}
-      <ul className={`${styles.ingredients} custom-scroll`}>
-        {ingredients.map(main => (
-          <li className={`${styles.ingredient} mr-1`} key={main._id}>
-            <DragIcon type="primary" />
-            <ConstructorElement
-            text={main.name}
-            price={main.price}
-            thumbnail={main.image}
+    <section className={`mt-25 ${styles.section}`} ref={drop}>
+      <div className={`custom-scroll pr-2 ${styles.constructor}`}>
+        {bun.length > 0 && (
+          <ConstructorElement
+            type="top"
+            text={bun[0].name + ' ' + '(верх)'}
+            price={bun[0].price}
+            thumbnail={bun[0].image}
+            isLocked
+            extraClass='ml-8 mr-2'
           />
-          </li>
-        ))}
-      </ul>
-      {bun && (
-        <ConstructorElement
-          type="bottom"
-          text={bun.name + '' + '(низ)'}
-          price={bun.price}
-          thumbnail={bun.image}
-          isLocked={true}
-          extraClass='ml-8 mr-2'
-      />
-      )}
+        )
+        }
+        <div className={`custom-scroll pr-2 ${styles.ingredients}`}>
+          {fillings.map((item) => (
+            <ConstructorItem 
+              ingredientData={item}
+              key={item.key} 
+            />
+          ))}
+        </div>
+        {bun.length > 0 && (
+          <ConstructorElement
+            type="bottom"
+            text={bun[0].name + ' ' + '(низ)'}
+            price={bun[0].price}
+            thumbnail={bun[0].image}
+            isLocked
+            extraClass='ml-8 mr-2'
+          />
+        )
+        }
+      </div>
+
       <div className={styles.total_price}>
         <p className='text text_type_digits-medium'>
           {totalPrice}
           <span className='ml-2'><CurrencyIcon type='primary' /></span>
         </p>
         <Button 
-          onClick={getOrder} 
+          onClick={handleGetOrder} 
           htmlType="button" 
           type="primary" 
           size="large"
@@ -133,5 +122,3 @@ function BurgerConstructor({ onModalOpen }) {
     </section>
   );
 }
-
-export default BurgerConstructor;

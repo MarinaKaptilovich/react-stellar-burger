@@ -1,7 +1,9 @@
-import { ingredientPropType } from "../../utils/prop-types";
-import styles from "./ingredient-details.module.css"
+import styles from "./ingredient-details.module.css";
+import { useSelector } from "react-redux";
 
-function IngredientDetails({ ingredient }) {
+export default function IngredientDetails() {
+  const { ingredient } = useSelector(state => state.modalData);
+
   return (
     <>
       <h1 className={`${styles.title} text text_type_main-large mt-8`}>
@@ -31,8 +33,3 @@ function IngredientDetails({ ingredient }) {
   );
 }
   
-  IngredientDetails.propTypes = {
-    ingredient: ingredientPropType
-  }
-  
-  export default IngredientDetails;
