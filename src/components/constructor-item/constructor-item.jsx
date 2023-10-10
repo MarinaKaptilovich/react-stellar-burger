@@ -13,7 +13,6 @@ import styles from './constructor-item.module.css';
 import { ingredientPropType } from '../../utils/prop-types';
 
 export default function ConstructorItem({ ingredientData }) {
-    const ref = useRef(null);
     const fillings = useSelector(state => state.burgerData.fillings);
     const { sortFilling, deleteFilling } = useActions();
     const dropIndex = fillings.findIndex(item => item.key === ingredientData.key);

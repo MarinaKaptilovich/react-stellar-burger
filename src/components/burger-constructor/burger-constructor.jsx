@@ -10,7 +10,7 @@ import {
 import styles from './burger-constructor.module.css';
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 import ConstructorItem from "../constructor-item/constructor-item";
 import { useActions } from "../../utils/use-actions";
@@ -19,6 +19,7 @@ import { getOrder } from "../../services/order-details";
 export default function BurgerConstructor() {
   const burgerData = useSelector(state => state.burgerData);
   const { addBun, addFilling } = useActions();
+  const dispatch = useDispatch();
 
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
@@ -59,7 +60,7 @@ export default function BurgerConstructor() {
   const handleGetOrder = () => {
     const totalIngredients = [...bun, ...fillings]
     if (totalIngredients.length >= 1) {
-      getOrder(totalIngredients)
+      dispatch(getOrder(totalIngredients))
       openOrderModal()
     }
   }
