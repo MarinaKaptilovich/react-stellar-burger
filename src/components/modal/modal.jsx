@@ -8,7 +8,6 @@ import { useEffect } from 'react'
 function Modal({ title, children, opened, toggle }) {
 
   const handleEsc = event => {
-    console.log(event)
     if (event.key === "Escape") toggle()
   }
 
@@ -21,9 +20,9 @@ function Modal({ title, children, opened, toggle }) {
     <div className={styles.container}>
       <div className={`pt-10 pl-10 pr-10 ${styles.card}`} onClick={event => event.stopPropagation()}>
         <div className={styles.head}>
-          <button className={styles.close}>
-            <CloseIcon onClick={toggle} />
-          </button>
+        <button className={styles.close} onClick={toggle}>
+          <CloseIcon />
+        </button>
           {title && <h2 className="text text_type_main-large" />}
         </div>
         {children}
