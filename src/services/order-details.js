@@ -3,17 +3,10 @@ import {
     createAsyncThunk
 } from "@reduxjs/toolkit";
 
-import { createOrder } from "../utils/api";
+import { requestGetOrderWithRefresh } from "../utils/api";
 
 const getIngredientsId = (array) => {
-    return array.reduce((total, item) => {
-        if (item) {
-            return [...total, item._id]
-        }
-        else {
-            return total;
-        }
-    }, [])
+    return array.filter(item => item).map(item => item._id);
 };
 
 const initialState = {
@@ -29,7 +22,7 @@ export const getOrder = createAsyncThunk(
     'getOrderData',
     async (ingredients) => {
         const ingredientsId = getIngredientsId(ingredients);
-        const orderData = await createOrder(ingredientsId);
+        const orderData = await requestGetOrderWithRefresh(ingredientsId);
         return orderData;
     }
 );
