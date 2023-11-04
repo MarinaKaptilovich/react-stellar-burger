@@ -8,9 +8,14 @@ import styles from './ingredient.module.css';
 import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import { useActions } from '../../utils/use-actions';
+import { 
+  useLocation,
+  Link
+} from 'react-router-dom';
 
 export default function Ingredient({ ingredientData, onModalOpen }) {
   const burgerData = useSelector(state => state.burgerData);
+  const location = useLocation();
 
   const getAmountOfIngredient = (ingredient, array) => {
     const amount = array.reduce((total, item) => {
@@ -44,12 +49,12 @@ export default function Ingredient({ ingredientData, onModalOpen }) {
   };
 
   return (
-    <div className={styles.card} ref={drag} onClick={clickOpenModal}>
+    <Link to={{ pathname: `/ingredients/${ingredientData._id}`, state: { background: location } }} className={styles.card} ref={drag}>
       {ingredientAmount > 0 && <Counter count={ingredientAmount} />}
       <img src={image} alt={name} className="pl-4 pr-4" />
       <p className={`text text_type_digits-default ${styles.price}`}>{price} <CurrencyIcon /></p>
       <p className={`text text_type_main-default ${styles.name}`} >{name}</p>
-    </div>
+    </Link>
   )
 }
   

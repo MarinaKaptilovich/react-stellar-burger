@@ -18,13 +18,13 @@ export default function Orders() {
     useEffect(() => {
         dispatch({
             type: 'PROFILE_ORDERS_WS_CONNECTION_START', 
-            payload: `wss://norma.nomoreparties.space/orders?token=${localStorage.getItem('accessToken').split('Bearer ')[1]}`
+            payload: `wss://norma.nomoreparties.space/orders`
         })
     }, []);
 
     return (
         <>
-            {location.pathname === 'profile/orders' &&
+            {location.pathname === '/profile/orders' &&
                 <ul className={`${styles.orders} custom-scroll`}>
                     {orders.length > 0 && 
                     orders.map(order => <Order key={order._id} order={order} />)}

@@ -2,7 +2,6 @@ import styles from './profile.module.css';
 import { useState } from "react";
 import { 
     useLocation,
-    useNavigate,
     NavLink,
     Outlet
 } from 'react-router-dom';
@@ -12,7 +11,6 @@ import { logout } from '../../services/user';
 export default function Profile() {
     const dispatch = useDispatch();
     const [active, setActive] = useState(false);
-    const navigate = useNavigate();
     const location = useLocation().pathname;
 
     function onLogout(event) {

@@ -1,9 +1,0 @@
-.app {
-  display: flex;
-  flex-direction: row;
-  gap: 40px;
-  justify-content: center;
-  height: 100vh;
-  background-color: #131316;
-  color: #f2f2f3;
-}

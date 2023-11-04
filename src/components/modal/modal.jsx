@@ -5,7 +5,7 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 import { createPortal } from 'react-dom';
 import { useEffect } from 'react'
 
-function Modal({ title, children, opened, toggle }) {
+export default function Modal({ title, children, toggle }) {
 
   const handleEsc = event => {
     if (event.key === "Escape") toggle()
@@ -17,27 +17,24 @@ function Modal({ title, children, opened, toggle }) {
   }, [])
 
   return createPortal(
-    <div className={styles.container}>
-      <div className={`pt-10 pl-10 pr-10 ${styles.card}`} onClick={event => event.stopPropagation()}>
-        <div className={styles.head}>
-        <button className={styles.close} onClick={toggle}>
-          <CloseIcon />
-        </button>
-          {title && <h2 className="text text_type_main-large" />}
+    <ModalOverlay toggle={toggle}>
+      <div className={styles.container}>
+        <div className={`pt-10 pl-10 pr-10 ${styles.card}`} onClick={event => event.stopPropagation()}>
+          <div className={styles.head}>
+          <button className={styles.close} onClick={toggle}>
+            <CloseIcon />
+          </button>
+            {title && <h2 className="text text_type_main-large" />}
+          </div>
+          {children}
         </div>
-        {children}
       </div>
-      <ModalOverlay opened={opened} toggle={toggle} />
-    </div>,
-    document.querySelector('#modal')
-  );
-}
+    </ModalOverlay>
+    , document.body);
+};
   
 Modal.propTypes = {
   title: PropTypes.string,
   children: PropTypes.node.isRequired,
-  opened: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired
 }
-  
-export default Modal;

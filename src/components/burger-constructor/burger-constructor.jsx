@@ -15,11 +15,17 @@ import { useDrop } from "react-dnd";
 import ConstructorItem from "../constructor-item/constructor-item";
 import { useActions } from "../../utils/use-actions";
 import { getOrder } from "../../services/order-details";
+import { 
+  useLocation,
+  useNavigate
+} from "react-router-dom";
 
 export default function BurgerConstructor() {
   const burgerData = useSelector(state => state.burgerData);
   const { addBun, addFilling } = useActions();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
@@ -62,12 +68,13 @@ export default function BurgerConstructor() {
     if (totalIngredients.length >= 1) {
       dispatch(getOrder(totalIngredients))
       openOrderModal()
+      navigate('/order',{state: { background: location }})
     }
   }
 
   return(
     <section className={`mt-25 ${styles.section}`} ref={drop}>
-      <div className={`custom-scroll pr-2 ${styles.constructor}`}>
+      <div className={styles.constructor}>
         {bun.length > 0 && (
           <ConstructorElement
             type="top"
@@ -79,6 +86,9 @@ export default function BurgerConstructor() {
           />
         )
         }
+        <ul className={`${styles.ingredients} custom-scroll`}>
+          { fillings.map((item) => (<ConstructorItem ingredientData={item} key={item.key} />))}
+        </ul> 
         <div className={`custom-scroll pr-2 ${styles.ingredients}`}>
           {fillings.map((item) => (
             <ConstructorItem 

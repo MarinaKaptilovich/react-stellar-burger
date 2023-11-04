@@ -9,15 +9,8 @@ import {
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-function getIngredientsId(array) {
-    return array.reduce((total,item) => {
-        if (item) {
-          return [...total, item._id]
-        }
-        else {
-          return total
-        }
-    }, [])
+const getIngredientsId = (array) => {
+    return array.filter(item => item).map(item => item._id);
 };
 
 export default function Order({ order }) {

@@ -1,11 +1,24 @@
 import styles from "./ingredient-details.module.css";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
+const getIngredientsId = (array) => {
+  return array.filter(item => item).map(item => item._id);
+};
 
 export default function IngredientDetails() {
-  const { ingredient } = useSelector(state => state.modalData);
+  const ingredients = useSelector(state => state.ingredientsData.ingredients);
+  const { ingredientId } = useParams();
+
+  let ingredient
+  if (ingredients.length > 0) {
+    ingredient = getIngredientsId(ingredients, ingredientId);
+  }
 
   return (
     <>
+    {ingredient && 
+    <>        
       <h1 className={`${styles.title} text text_type_main-large mt-8`}>
         Детали ингредиента
       </h1>
@@ -17,18 +30,20 @@ export default function IngredientDetails() {
           <span className='text text_type_digits-default text_color_inactive'>{ingredient.calories}</span>
         </article>
         <article className={styles.value}>
-        <p className='text text_type_main-default text_color_inactive'>Белки, г</p>
-        <span className='text text_type_digits-default text_color_inactive'>{ingredient.proteins}</span>
+          <p className='text text_type_main-default text_color_inactive'>Белки, г</p>
+          <span className='text text_type_digits-default text_color_inactive'>{ingredient.proteins}</span>
         </article>
         <article className={styles.value}>
-        <p className='text text_type_main-default text_color_inactive'>Жиры, г</p>
-        <span className='text text_type_digits-default text_color_inactive'>{ingredient.fat}</span>
+          <p className='text text_type_main-default text_color_inactive'>Жиры, г</p>
+          <span className='text text_type_digits-default text_color_inactive'>{ingredient.fat}</span>
         </article>
         <article className={styles.value}>
-        <p className='text text_type_main-default text_color_inactive'>Углеводы, г</p>
-        <span className='text text_type_digits-default text_color_inactive'>{ingredient.carbohydrates}</span>
+          <p className='text text_type_main-default text_color_inactive'>Углеводы, г</p>
+          <span className='text text_type_digits-default text_color_inactive'>{ingredient.carbohydrates}</span>
         </article>
       </div>
+    </>
+    }
     </>
   );
 }
