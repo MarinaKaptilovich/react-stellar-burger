@@ -1,21 +1,21 @@
-export const socketMiddleware = (wsConfig) => {
+export const socketMiddleware = wsConfig => {
     return (store) => {
-        let socket = null;
-        const { onOpen } = wsConfig;
+        let socket = null
+        const { onOpen } = wsConfig
         return (next) => {
             return (action) => {
-                const { type, payload } = action;
-                const { dispatch } = store;
-;
+                const { type, payload } = action
+                const { dispatch } = store
+                
                 if (type === 'wsInit') {
-                    socket = new WebSocket(payload);
+                    socket = new WebSocket(payload)
                 }
 
                 socket.onOpen = (e) => {
-                    console.log(e);
+                    console.log(e)
                 }
 
-                next(action);
+                next(action)
             }
         }
     }

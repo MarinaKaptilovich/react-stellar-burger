@@ -86,9 +86,6 @@ export default function BurgerConstructor() {
           />
         )
         }
-        <ul className={`${styles.ingredients} custom-scroll`}>
-          { fillings.map((item) => (<ConstructorItem ingredientData={item} key={item.key} />))}
-        </ul> 
         <div className={`custom-scroll pr-2 ${styles.ingredients}`}>
           {fillings.map((item) => (
             <ConstructorItem 

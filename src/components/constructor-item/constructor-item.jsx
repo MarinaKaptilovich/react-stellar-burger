@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { 
     useDrag,
     useDrop
@@ -25,7 +24,7 @@ export default function ConstructorItem({ ingredientData }) {
         }),
     }));
 
-    const [,drop] = useDrop(() => ({
+    const [, drop] = useDrop(() => ({
         accept: 'burgerIngredient',
         hover: (item) => {
             const dragIndex = fillings.findIndex(filling => filling.key === item.key)
@@ -43,7 +42,7 @@ export default function ConstructorItem({ ingredientData }) {
         <div ref={preview}>
             <li className={styles.item} style={{ opacity }} ref={drop}>
                 <div ref={drag}>
-                <DragIcon type="primary"/>
+                    <DragIcon type="primary"/>
                 </div>
                 <ConstructorElement 
                     price={ingredientData.price}
@@ -51,8 +50,8 @@ export default function ConstructorItem({ ingredientData }) {
                     text={ingredientData.name}
                     handleClose={() => {
                         deleteFilling(ingredientData)
-                }}
-            />
+                    }}
+                />
             </li>
         </div>
     )

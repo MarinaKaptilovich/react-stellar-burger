@@ -156,9 +156,8 @@ export default function BurgerIngredients() {
         <Modal
           title="Детали ингредиента"
           toggle={closeIngredientModal}
-          opened={isIngredientModalOpen}
         >
-          <IngredientDetails ingredient={modalIngredient} />
+          <IngredientDetails />
         </Modal>
       )}
     </section>

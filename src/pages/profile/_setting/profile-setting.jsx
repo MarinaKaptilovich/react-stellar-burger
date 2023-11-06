@@ -6,15 +6,12 @@ import {
     EmailInput,
     Button 
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { 
-    useSelector,
-    useDispatch
-} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { changeUser } from '../../../services/user';
 
 export default function ProfileSetting() {
     const dispatch = useDispatch();
-    const user = useSelector(store => store.userData.user);
+
     const [name, setName] = useState({ active: true, value: '' });
     const [password, setPassword] = useState({ active: true, value: '' });
     const [email, setEmail] = useState({ active: true, value: '' });
@@ -37,7 +34,7 @@ export default function ProfileSetting() {
     };
 
     return (
-        <form className={styles.form} onSubmit={submitHandler}>
+        <form className={styles.form} actiom='profile' onSubmit={submitHandler}>
             <Input
                 type={'text'} 
                 placeholder={'Имя'}  

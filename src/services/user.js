@@ -10,12 +10,17 @@ import {
 const initialState = {
     user: null,
     isAuthChecked: false,
-    isError: false
+    isError: false,
+    loaderActive: false
 };
 
 export const getUser = () => {
     return (dispatch) => {
         return requestGetUserWithRefresh()
+            .then((res) => {
+                dispatch(setLoaderActive(true))
+                return res;
+            })
             .then((res) => {
                 dispatch(setUser(res.user));
             });
@@ -41,6 +46,7 @@ export const checkUserAuth = () => {
                 })
                 .finally(() => {
                     dispatch(setAuthChecked(true));
+                    dispatch(setLoaderActive(false))
                 });
         } else {
             dispatch(setAuthChecked(true));
@@ -76,6 +82,9 @@ export const userSlice = createSlice({
         },
         setUser: (state, action) => {
             state.user = action.payload
+        },
+        setLoaderActive: (state, action) => {
+            state.loaderActive = action.payload
         }
     },
       extraReducers: (builder) => {
@@ -84,38 +93,62 @@ export const userSlice = createSlice({
                 return {
                     ...state,
                     user: action.payload,
-                    isAuthChecked: true
+                    isAuthChecked: true,
+                    loaderActive: false
+                }
+            })
+            .addCase(login.pending, (state) => {
+                return {
+                    ...state,
+                    loaderActive: true
                 }
             })
             .addCase(login.rejected, (state) => {
                 return {
                     ...state,
-                    isError: true
+                    isError: true,
+                    loaderActive: false
                 }
             })
             .addCase(logout.fulfilled, (state) => {
                 return {
                     ...state,
                     user: null,
-                    isAuthChecked: false
+                    isAuthChecked: false,
+                    loaderActive:false
+                }
+            })
+            .addCase(logout.pending, (state) => {
+                return {
+                    ...state,
+                    loaderActive: true
                 }
             })
             .addCase(logout.rejected, (state) => {
                 return {
                     ...state,
-                    isError: true
+                    isError: true,
+                    loaderActive: false
                 }
             })
             .addCase(changeUser.fulfilled, (state, action) => {
                 return {
                     ...state,
-                    user: action.payload
+                    user: action.payload,
+                    loaderActive: false
+                }
+            })
+            .addCase(changeUser.pending, (state) => {
+                return {
+                    ...state,
+                    loaderActive: true
                 }
             })
             .addCase(changeUser.rejected, (state) => {
                 return {
                     ...state,
-                    isError: true
+                    isError: true,
+                    loaderActive: false
                 }
             })
       }
@@ -123,6 +156,7 @@ export const userSlice = createSlice({
 
 export const {
     setUser,
-    setAuthChecked
+    setAuthChecked,
+    setLoaderActive
 } = userSlice.actions;
 export const userReducer = userSlice.reducer;

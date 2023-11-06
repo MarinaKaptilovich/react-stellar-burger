@@ -15,7 +15,8 @@ const initialState = {
         number: null
     },
     status: '',
-    success: false
+    success: false,
+    loaderActive: false
 };
 
 export const getOrder = createAsyncThunk(
@@ -34,28 +35,31 @@ export const orderSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getOrder.pending, (state) => {
-                state.status = 'loading'
+               return {
+                ...state,
+                loaderActive: true
+               }
             })
             .addCase(getOrder.fulfilled, (state, action) => {
                 return {
-                    ...state,
                     name: action.payload.name,
                     order: {
                         number: action.payload.order.number
                     },
                     status: 'loaded',
-                    success: action.payload.success
+                    success: action.payload.success,
+                    loaderActive: false
                 }
             })
             .addCase(getOrder.rejected, (state) => {
                 return {
-                    ...state,
                     name: '',
                     order: {
                         number: null
                     },
                     status: 'rejected',
-                    success: false
+                    success: false,
+                    loaderActive: false
                 }
             })
     }

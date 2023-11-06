@@ -21,12 +21,14 @@ export default function AppHeader() {
                     <NavLink 
                         to='/'
                         type={location.pathname === '/' ? 'primary' : 'inactive'}
+                        className={styles.nav__link}
                     >
                         <BurgerIcon type={location.pathname === '/' ? 'primary' : 'secondary' } />Конструктор
                     </NavLink>
                     <NavLink 
                         to='/feed'
                         type="inactive"
+                        className={styles.nav__link}
                     >
                         <ListIcon type='secondary' />Лента заказов
                     </NavLink>
@@ -35,6 +37,7 @@ export default function AppHeader() {
                 <NavLink 
                     to='/profile'
                     type={location.pathname.includes('/profile') ? 'primary' : 'inactive' }
+                    className={styles.nav__link}
                 >
                     <ProfileIcon type={location.pathname.includes('/profile') ? 'primary' : 'secondary' } />Личный кабинет
                 </NavLink>
