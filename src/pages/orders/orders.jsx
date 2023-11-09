@@ -18,7 +18,7 @@ export default function Orders() {
     useEffect(() => {
         dispatch({
             type: 'PROFILE_ORDERS_WS_CONNECTION_START', 
-            payload: `wss://norma.nomoreparties.space/orders`
+            payload: `wss://norma.nomoreparties.space/orders?token=${localStorage.getItem('accessToken').split('Bearer ')[1]}`
         })
     }, []);
 

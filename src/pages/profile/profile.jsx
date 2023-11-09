@@ -21,6 +21,7 @@ export default function Profile() {
 
     return (
         <main className={styles.main}>
+            {(location === '/profile' || location === '/profile/orders') &&
             <div className={styles.sidebar}>
                 <nav className={styles.nav}>
                     <Link
@@ -55,6 +56,7 @@ export default function Profile() {
                     }
                 </span>
             </div>
+            }
             <Outlet />
         </main>
     )

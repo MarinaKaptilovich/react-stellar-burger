@@ -16,6 +16,8 @@ export default function Home() {
             .catch(error => setError({ hasError: true, errorMessage: error }))
       }, [])
 
+    console.log(ingredientsData);
+
     return (
         <main className={styles.main}>
             {!ingredientsData.hasError ? (

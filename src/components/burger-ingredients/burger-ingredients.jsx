@@ -14,6 +14,8 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 export default function BurgerIngredients() {
   const ingredients = useSelector(state => state.ingredientsData.ingredients);
 
+console.log(ingredients);
+
   const buns = useMemo(() => ingredients.filter((item) => item.type === 'bun'), [ingredients]);
   const mains = useMemo(() => ingredients.filter((item) => item.type === 'main'), [ingredients]);
   const sauces = useMemo(() => ingredients.filter((item) => item.type === 'sauce'), [ingredients]);

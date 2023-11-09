@@ -4,9 +4,9 @@ const checkResult = res => {
   return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
 };
 
-const request = (url, params) => {
-  return fetch(`${api}${url}`, params)
-    .then(checkResult);
+const request = async (url, params) => {
+  const res = await fetch(`${api}${url}`, params);
+  return checkResult(res);
 };
 
 export const getIngredients = () => request('/ingredients');
@@ -20,6 +20,12 @@ export const createOrder = (ingredients) => {
       authorization: localStorage.getItem('accessToken')
     }
   });
+};
+
+export const getOrder = (number) => {
+  return request(`/orders/${number}`, {
+    method: 'GET'
+  })
 };
 
 export const requestRefreshToken = () => {
@@ -44,7 +50,7 @@ export async function requestGetOrderWithRefresh(ingredients) {
           localStorage.setItem("refreshToken", res.refreshToken);
           localStorage.setItem("accessToken", res.accessToken);
         });
-      return requestRefreshToken();
+      return createOrder();
     }
   }
 };
@@ -92,7 +98,7 @@ export const requestGetUser = () => {
   return request('/auth/user', {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json;charset=utf-8',
+      'Content-Type': 'application/json',
       authorization: localStorage.getItem('accessToken')
     }
   });
@@ -113,16 +119,16 @@ export const requestGetUserWithRefresh = async () => {
   }
 };
 
-export const requestChangeUser = (data) => {
+export const requestChangeUser = ({ name, email, password }) => {
   return request('/auth/user', {
     method: 'PATCH',
     body: JSON.stringify({
-      name: data.name,
-      email: data.email,
-      password: data.password
+      name,
+      email,
+      password
     }),
     headers: {
-      'Content-Type': 'application/json;charset=utf-8',
+      'Content-Type': 'application/json',
       authorization: localStorage.getItem('accessToken')
     }
   });
