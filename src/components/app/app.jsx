@@ -2,11 +2,9 @@ import AppHeader from "../app-header/app-header";
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useActions } from "../../utils/use-actions";
-import { getIngredients } from "../../utils/api";
-
 import { 
   useLocation,
+  useNavigate,
   Route,
   Routes
 } from "react-router-dom";
@@ -21,6 +19,8 @@ import ProfileSetting from "../../pages/profile/_setting/profile-setting";
 import Feed from "../../pages/feed/feed";
 import Orders from "../../pages/orders/orders";
 import NotFound from "../../pages/not-found/not-found";
+import Ingredient from "../../pages/ingredient/ingredient";
+import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 
 import { checkUserAuth } from "../../services/user";
@@ -30,16 +30,14 @@ import {
 } from "../protected-route/protected-route-element";
 
 export default function App() {
-  const { setIngredients, setError } = useActions();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state && location.state.background;
 
-  useEffect(() => {
-    getIngredients()
-      .then(ingredient => setIngredients([...ingredient.data]))
-      .catch(error => setError({ hasError: true, errorMessage: error }))
-  }, []);
+  const toggleHandler = () => {
+    navigate('/path')
+  };
 
   useEffect(() => dispatch(checkUserAuth()), []);
 
@@ -48,7 +46,7 @@ export default function App() {
       <AppHeader />
         <Routes location={background || location}>
         <Route path="/" element={ <Home /> } />
-        <Route path='/ingredients/:ingredientId' element={ <IngredientDetails fullScrin={true} /> } />
+        <Route path='/ingredients/:id' element={ <Ingredient /> } />
         <Route path="/login" element={<OnlyUnAuth component = { <Login /> } />} />
         <Route path="/register" element={ <OnlyUnAuth component = { <Register /> } />} />
         <Route path="/forgot-password" element={ <OnlyUnAuth component = { <ForgotPassword /> } /> } />
@@ -60,6 +58,13 @@ export default function App() {
         <Route path="/feed" element={ <Feed /> } />
         <Route path="*" element={ <NotFound /> } /> 
       </Routes>
+      {background &&
+        <Route path="/ingredients/:id">
+          <Modal title='Детали ингредиента' toggle={toggleHandler}>
+            <IngredientDetails />
+          </Modal>
+        </Route>
+      }
     </>
   );
 }

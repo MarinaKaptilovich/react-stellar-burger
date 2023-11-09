@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 
 export default function AppHeader() {
-    const location = useLocation();
+    const { pathname } = useLocation();
 
     return (
         <header className={`pt-4 pb-4 ${styles.header}`}>
@@ -20,10 +20,10 @@ export default function AppHeader() {
                 <nav className={styles.nav}>
                     <NavLink 
                         to='/'
-                        type={location.pathname === '/' ? 'primary' : 'inactive'}
+                        type={pathname === '/' ? 'primary' : 'inactive'}
                         className={styles.nav__link}
                     >
-                        <BurgerIcon type={location.pathname === '/' ? 'primary' : 'secondary' } />Конструктор
+                        <BurgerIcon type={pathname === '/' ? 'primary' : 'secondary' } />Конструктор
                     </NavLink>
                     <NavLink 
                         to='/feed'
@@ -36,10 +36,10 @@ export default function AppHeader() {
                 <Link to='' className={styles.logo}><Logo alt="Логотип" /></Link>
                 <NavLink 
                     to='/profile'
-                    type={location.pathname.includes('/profile') ? 'primary' : 'inactive' }
+                    type={pathname.includes('/profile') ? 'primary' : 'inactive' }
                     className={styles.nav__link}
                 >
-                    <ProfileIcon type={location.pathname.includes('/profile') ? 'primary' : 'secondary' } />Личный кабинет
+                    <ProfileIcon type={pathname.includes('/profile') ? 'primary' : 'secondary' } />Личный кабинет
                 </NavLink>
             </div>
         </header>

@@ -6,7 +6,6 @@ import {
     Link
 } from 'react-router-dom';
 import { 
-    Input, 
     Button, 
     EmailInput 
 } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -14,19 +13,17 @@ import { requestForgotPassword } from '../../utils/api';
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState('');
-    const [error, setError] = useState({ hasError: false, errorMessage: '' });
     const navigate = useNavigate();
     const location = useLocation();
 
-    function submitHandler(event) {
+    async function submitHandler(event) {
         event.preventDefault();
-        requestForgotPassword(email)
-        .then(() => {
-            navigate('/reset-password', {state:{ from: location }})
-        })
-        .catch((error) => {
-            setError({ hasError: true, errorMessage: error })
-        })
+        try {
+            await requestForgotPassword(email);
+            navigate('/reset-password', { state: { from: location } });
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -53,21 +50,15 @@ export default function ForgotPassword() {
                         Восстановить
                     </Button>
 
-                    {error.hasError && (
-                        <p className='text text_type_main-default text_color_inactive mt-4'>
-                            {error.errorMessage}
-                        </p>
-                    )}
-
                     <div className={styles.container}>
                         <p className='text text_type_main-default text_color_inactive'>
-                        Вспомнили пароль?
+                            Вспомнили пароль?
+                            <Link to='/login' style={{ textDecoration: 'none' }}>
+                                <span className={styles.link}>
+                                    Войти
+                                </span>
+                            </Link>
                         </p>
-                        <Link to='/login' style={{ textDecoration: 'none' }}>
-                            <span className={styles.link}>
-                                Войти
-                            </span>
-                        </Link>
                     </div>
                 </form>
             </main>

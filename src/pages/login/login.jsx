@@ -27,7 +27,12 @@ export default function Login() {
     function submitHandler(event) {
         event.preventDefault();
         dispatch(login({ email: email, password: password }));
-        navigate(location.state.from || '/profile');
+        
+        if (location.state && location.state.from) {
+            navigate(location.state.from);
+        } else {
+            navigate('/profile');
+        }
     };
 
     return (
@@ -71,21 +76,22 @@ export default function Login() {
                     <div className={`${styles.container} mt-20`}>
                         <p className='text text_type_main-default text_color_inactive'>
                             Вы - новый пользователь?
+                            <Link to='/register' style={{ textDecoration: 'none' }}>
+                                <span className={`${styles.link} text text_type_main-default`}>
+                                    Зарегистрироваться
+                                </span>
+                            </Link>
                         </p>
-                        <Link to='/register' style={{ textDecoration: 'none' }}>
-                            <span className={styles.link}>
-                                Зарегистрироваться
-                            </span>
-                        </Link>
-
-                        <p className='text text_type_main-default text_color_inactive'>
+                    </div>
+                    <div className={styles.container}>
+                        <p className='ext text_type_main-default text_color_inactive mt-4'>
                             Забыли пароль?
+                            <Link to='/forgot-password' style={{ textDecoration: 'none' }}>
+                                <span className={styles.link}>
+                                    Восстановить пароль
+                                </span>
+                            </Link>
                         </p>
-                        <Link to='/forgot-password' style={{ textDecoration: 'none' }}>
-                            <span className={styles.link}>
-                                Восстановить пароль
-                            </span>
-                        </Link>
                     </div>
                 </form>
             </main>

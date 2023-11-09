@@ -15,26 +15,21 @@ import { requestResetPassword } from '../../utils/api';
 export default function ResetPassword() {
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
-    const [error, setError] = useState({hasError: false, errorMessage: ''});
-    const [success, setSuccess] = useState({hasSuccess: false, successMessage: ''});
     const location = useLocation();
 
     function submitHandler(event) {
         event.preventDefault();
         requestResetPassword({ password: password, token: token })
-            .then((res => {
-                setSuccess({ hasSuccess: res.success, successMessage: res.message  })
-            }))
-            .catch((err) => {
-                setError({ hasError: true, errorMessage: err })
-            })
+        .catch((error) => {
+            console.error(error);
+        })
     };
 
     return (
         <>
-        {location.state?.from?.pathname !== '/forgot-password' && 
+        {location.state?.from?.pathname !== '/forgot-password' && (
             <Navigate to='/forgot-password' />
-        }
+        )}
 
         <main className={styles.main}>
             <form className={styles.form} onSubmit={submitHandler}>
@@ -61,30 +56,20 @@ export default function ResetPassword() {
                     htmlType='submit'
                     type='primary'
                     size='medium'
+                    extraClass='mt-6'
                 >
                     Сохранить
                 </Button>
 
-                {success.hasSuccess && (
-                    <p className='text text_type_main-default text_color_inactive mt-4'>
-                        {success.successMessage}
-                    </p>
-                )}
-                {error.hasError && (
-                    <p className='text text_type_main-default text_color_inactive mt-4'>
-                    {error.errorMessage}
-                </p>
-                )}
-
                 <div className={styles.container}>
-                    <p className='text text_type_main-default text_color_inactive'>
+                    <p className='text text_type_main-default text_color_inactive mt-20'>
                         Вспомнили пароль?
+                        <Link to='/login' style={{ textDecoration: 'none' }}>
+                            <span className={styles.link}>
+                                Войти
+                            </span>
+                        </Link>
                     </p>
-                    <Link to='/login' style={{ textDecoration: 'none' }}>
-                        <span className={styles.link}>
-                            Войти
-                        </span>
-                    </Link>
                 </div>
             </form>
         </main>

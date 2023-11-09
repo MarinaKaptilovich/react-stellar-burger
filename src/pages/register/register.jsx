@@ -16,7 +16,7 @@ export default function Register() {
 
     function submitHandler(event) {
         event.preventDefault();
-        requestRegister({ email, password: password, name: name });
+        requestRegister({ email: email, password: password, name: name });
     };
 
     return (
@@ -62,14 +62,14 @@ export default function Register() {
                     </Button>
 
                     <div className={styles.container}>
-                        <p className='text text_type_main-default text_color_inactive'>
+                        <p className='text text_type_main-default text_color_inactive mt-20'>
                             Уже зарегистрированы?
+                            <Link to='/login' style={{ textDecoration: 'none' }}>
+                                <span className={styles.link}>
+                                    Войти
+                                </span>
+                            </Link>
                         </p>
-                        <Link to='/login' style={{ textDecoration: 'none' }}>
-                            <span className={styles.link}>
-                                Войти
-                            </span>
-                        </Link>
                     </div>
                 </form>
             </main>

@@ -10,7 +10,11 @@ const ProtectedElement = ({ component, onlyUnAuth = false }) => {
 
     if (onlyUnAuth && user) {
         const { from } = location.state || { from: { pathname: '/' } };
-        return <Navigate to='/login' state ={{ from: from }} />;
+        return <Navigate to={from} />;
+    }
+    if (!onlyUnAuth && !user) {
+        const from = (location.pathname === '/order') ? '/' : location.pathname;
+        return <Navigate to='/login' state={{from: from}} />;
     }
 
     return component;
