@@ -2,18 +2,11 @@ import styles from "./ingredient-details.module.css";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-const getIngredientsId = (array) => {
-  return array.filter(item => item).map(item => item._id);
-};
-
 export default function IngredientDetails() {
   const ingredients = useSelector(state => state.ingredientsData.ingredients);
-  const { ingredientId } = useParams();
+  const { id } = useParams();
 
-  let ingredient
-  if (ingredients.length > 0) {
-    ingredient = getIngredientsId(ingredients, ingredientId);
-  }
+  const ingredient = ingredients.find(ingredient => ingredient._id === id)
 
   return (
     <>

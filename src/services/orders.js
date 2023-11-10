@@ -21,11 +21,14 @@ export const ordersSlice = createSlice({
             state.total = action.payload.total;
             state.totalToday = action.payload.totalToday;
         },
-        srtOrdersSocketConnectionStatus: (state, action) => {
+        setOrdersSocketConnectionStatus: (state, action) => {
             state.socketConnectionStatus = action.payload;
         },
     },
 });
 
-export const ordersAction = ordersSlice.actions;
+export const {
+    setOrders,
+    setOrdersSocketConnectionStatus
+} = ordersSlice.actions;
 export const ordersReducer = ordersSlice.reducer;

@@ -7,6 +7,18 @@ import { ordersReducer } from "./orders";
 import { feedReducer } from "./feed";
 import { userReducer } from "./user";
 import { socketMiddleware } from "./socketMiddleware";
+import { 
+    setOrders,
+    setOrdersSocketConnectionStatus,
+    ordersWebSocketStart,
+    ordersWebSocketStop
+} from "./orders";
+import { 
+    setFeed,
+    setFeedSocketConnectionStatus,
+    feedWebSocketStart,
+    feedWebSocketStop
+} from "./feed";
 
 export const store = configureStore({
     reducer: {
@@ -18,5 +30,21 @@ export const store = configureStore({
         feedData: feedReducer,
         userData: userReducer
     },
-        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(socketMiddleware)
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+        .concat(socketMiddleware({
+            onStart: feedWebSocketStart,
+            onStop: feedWebSocketStop,
+            onOpen: setFeedSocketConnectionStatus,
+            onMessage: setFeed,
+            onClose: setFeedSocketConnectionStatus,
+            onError: setFeedSocketConnectionStatus,
+        }), 
+        socketMiddleware({
+            onStart: ordersWebSocketStart,
+            onStop: ordersWebSocketStop,
+            onOpen: setOrdersSocketConnectionStatus,
+            onMessage: setOrders,
+            onClose: setOrdersSocketConnectionStatus,
+            onError: setOrdersSocketConnectionStatus,
+        }))  
 });

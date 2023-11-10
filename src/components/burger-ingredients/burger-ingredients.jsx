@@ -7,14 +7,9 @@ import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import Ingredient from '../ingredient/ingredient';
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-
 
 export default function BurgerIngredients() {
   const ingredients = useSelector(state => state.ingredientsData.ingredients);
-
-console.log(ingredients);
 
   const buns = useMemo(() => ingredients.filter((item) => item.type === 'bun'), [ingredients]);
   const mains = useMemo(() => ingredients.filter((item) => item.type === 'main'), [ingredients]);
@@ -50,10 +45,6 @@ console.log(ingredients);
   const openIngredientModal = (ingredient) => {
     setModalIngredient(ingredient);
     setIsIngredientModalOpen(true);
-  };
-  
-  const closeIngredientModal = () => {
-    setIsIngredientModalOpen(false);
   };
 
   return (
@@ -154,14 +145,6 @@ console.log(ingredients);
           </div>
       </div>
 
-      {isIngredientModalOpen && (
-        <Modal
-          title="Детали ингредиента"
-          toggle={closeIngredientModal}
-        >
-          <IngredientDetails />
-        </Modal>
-      )}
     </section>
   )
 }

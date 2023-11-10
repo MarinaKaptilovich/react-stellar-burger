@@ -27,7 +27,12 @@ export default function Login() {
     function submitHandler(event) {
         event.preventDefault();
         dispatch(login({ email: email, password: password }));
-        navigate(location.state.from || '/profile')
+        
+        if (location.state && location.state.from) {
+            navigate(location.state.from);
+        } else {
+            navigate('/profile');
+        }
     };
 
     return (

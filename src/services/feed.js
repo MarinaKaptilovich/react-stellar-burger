@@ -27,5 +27,8 @@ export const feedSlice = createSlice({
     }
 });
 
-export const feedAction = feedSlice.actions;
+export const {
+    setFeed,
+    setFeedSocketConnectionStatus
+} = feedSlice.actions;
 export const feedReducer = feedSlice.reducer;

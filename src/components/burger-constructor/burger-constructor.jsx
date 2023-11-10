@@ -1,15 +1,10 @@
-import { 
-  useMemo,
-  useState 
-} from "react";
+import { useMemo } from "react";
 import { 
   Button, 
   ConstructorElement, 
   CurrencyIcon, 
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-constructor.module.css';
-import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 import ConstructorItem from "../constructor-item/constructor-item";
@@ -26,16 +21,6 @@ export default function BurgerConstructor() {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-
-  const openOrderModal = () => {
-    setIsOrderModalOpen(true);
-  };
-  
-  const closeOrderModal = () => {
-    setIsOrderModalOpen(false);
-  };
 
   const [, drop] = useDrop(() => ({
     accept: 'ingredient',
@@ -67,7 +52,6 @@ export default function BurgerConstructor() {
     const totalIngredients = [...bun, ...fillings]
     if (totalIngredients.length >= 1) {
       dispatch(getOrder(totalIngredients))
-      openOrderModal()
       navigate('/order',{state: { background: location }})
     }
   }
@@ -121,12 +105,7 @@ export default function BurgerConstructor() {
           Оформить заказ
         </Button>
       </div>
-      
-      {isOrderModalOpen && (
-        <Modal toggle={closeOrderModal} opened={isOrderModalOpen}>
-          <OrderDetails />
-        </Modal>
-      )}
+
     </section>
   );
 }
