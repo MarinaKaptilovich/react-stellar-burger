@@ -30,7 +30,7 @@ export default function Modal({ title, children, toggle }) {
         </div>
       </div>
     </ModalOverlay>
-    , document.body);
+    , document.querySelector('#modal'));
 };
   
 Modal.propTypes = {

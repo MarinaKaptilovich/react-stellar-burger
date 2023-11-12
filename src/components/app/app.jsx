@@ -59,14 +59,6 @@ export default function App() {
   const userLoaderActive = useSelector(store => store.userData.loaderActive);
   const orderLoaderActive = useSelector(store => store.orderData.loaderActive);
 
-  if(location.pathname !== '/feed') {
-    dispatch({type: 'FEED_WS_CONNECTION_STOP'})
-  }
-
-  if(location.pathname !== '/profile/orders') {
-    dispatch({type: 'PROFILE_ORDERS_WS_CONNECTION_STOP'})
-  }
-
   return (
     <>
       <AppHeader />
@@ -75,7 +67,7 @@ export default function App() {
       : 
         <Routes location={background || location}>
           <Route path="/" element={ <Home /> } />
-          <Route path='/ingredients/:id' element={ <IngredientDetails /> } />
+          <Route path='/ingredients/:id' element={ <IngredientDetails fullScrin={true}/> } />
           <Route path="/login" element={<OnlyUnAuth component = { <Login /> } />} />
           <Route path="/register" element={ <OnlyUnAuth component = { <Register /> } />} />
           <Route path="/forgot-password" element={ <OnlyUnAuth component = { <ForgotPassword /> } /> } />
@@ -97,7 +89,7 @@ export default function App() {
         <Routes>
           <Route path="/ingredients/:id" element={
             <Modal title='Детали ингредиента' toggle={toggleHandler}>
-            <IngredientDetails />
+            <IngredientDetails fullScrin={false}/>
           </Modal>
           }
           />

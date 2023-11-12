@@ -2,7 +2,7 @@ import styles from "./ingredient-details.module.css";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-export default function IngredientDetails() {
+export default function IngredientDetails({fullScrin}) {
   const ingredients = useSelector(state => state.ingredientsData.ingredients);
   const { id } = useParams();
 
@@ -11,7 +11,7 @@ export default function IngredientDetails() {
   return (
     <>
     {ingredient && 
-    <>        
+    <div className={fullScrin ? styles.card_fullScrin : styles.card}>        
       <h1 className={`${styles.title} text text_type_main-large mt-8`}>
         Детали ингредиента
       </h1>
@@ -35,7 +35,7 @@ export default function IngredientDetails() {
           <span className='text text_type_digits-default text_color_inactive'>{ingredient.carbohydrates}</span>
         </article>
       </div>
-    </>
+    </div>
     }
     </>
   );

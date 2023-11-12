@@ -5,6 +5,7 @@
 }
 
 .ingredientsPanel {
+  max-height: 719px;
   overflow-y: scroll;
 }
   

@@ -12,7 +12,7 @@ import {
   Link
 } from 'react-router-dom';
 
-export default function Ingredient({ ingredientData, onModalOpen }) {
+export default function Ingredient({ ingredientData }) {
   const burgerData = useSelector(state => state.burgerData);
   const location = useLocation();
 
@@ -57,6 +57,5 @@ export default function Ingredient({ ingredientData, onModalOpen }) {
 }
   
 Ingredient.propTypes = {
-  ingredientData: ingredientPropType.isRequired,
-  onModalOpen: PropTypes.func
+  ingredientData: ingredientPropType.isRequired
 }
