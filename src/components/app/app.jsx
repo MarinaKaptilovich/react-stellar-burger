@@ -31,24 +31,16 @@ import {
   OnlyUnAuth
 } from "../protected-route/protected-route-element";
 
-import { useActions } from '../../utils/use-actions';
 import { getIngredients } from '../../utils/api';
 
 export default function App() {
-  const { setIngredients, setError } = useActions();
-
-  useEffect(() => {
-      getIngredients()
-          .then(ingredient => setIngredients([...ingredient.data]))
-          .catch(error => setError({ hasError: true, errorMessage: error }))
-  }, []);
-
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
 
   const background = location.state && location.state.background;
+
+  useEffect(() => dispatch(getIngredients()), []);
 
   const toggleHandler = () => {
     navigate('/')

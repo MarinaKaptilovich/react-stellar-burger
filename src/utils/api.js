@@ -1,3 +1,5 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+
 const api = 'https://norma.nomoreparties.space/api';
 
 const checkResult = res => {
@@ -9,7 +11,12 @@ const request = async (url, params) => {
   return checkResult(res);
 };
 
-export const getIngredients = () => request('/ingredients');
+export const getIngredients = createAsyncThunk(
+  '/ingredients', 
+  async () => {
+    const result = await request('/ingredients');
+    return result;
+});
 
 export const createOrder = (ingredients) => {
   return request('/orders', {

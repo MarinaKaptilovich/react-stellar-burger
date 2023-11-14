@@ -1,24 +1,41 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getIngredients } from "../utils/api";
 
 const initialState = {
     ingredients: [],
     hasError: false,
-    errorMessage: ''
+    loading: false
 };
 
 export const ingredientsSlice = createSlice({
     name: 'ingredientsData',
     initialState,
-    reducers: {
-        setIngredients: (state, action) => {
-            state.ingredients = action.payload
-        },
-        setError: (state, action) => {
-            state.hasError = action.payload.hasError
-            state.errorMessage = action.payload.errorMessage
-        }
-    },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(getIngredients.fulfilled, (state, action) => {
+                return {
+                ...state,
+                ingredients: action.payload,
+                loading: false,
+                hasError: false,
+                };
+            })
+            .addCase(getIngredients.pending, (state) => {
+                return {
+                ...state,
+                loading: true,
+                hasError: false,
+                };
+            })
+            .addCase(getIngredients.rejected, (state) => {
+                return {
+                ...state,
+                loading: false,
+                hasError: true,
+                };
+            });
+      },
 });
 
-export const ingredientsAction = ingredientsSlice.actions;
 export const ingredientsReducer = ingredientsSlice.reducer;
