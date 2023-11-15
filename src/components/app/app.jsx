@@ -31,7 +31,7 @@ import {
   OnlyUnAuth
 } from "../protected-route/protected-route-element";
 
-import { getIngredients } from '../../utils/api';
+import { loadIngredients } from "../../services/ingredients";
 
 export default function App() {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ export default function App() {
 
   const background = location.state && location.state.background;
 
-  useEffect(() => dispatch(getIngredients()), []);
+  useEffect(() => dispatch(loadIngredients()), []);
 
   const toggleHandler = () => {
     navigate('/')

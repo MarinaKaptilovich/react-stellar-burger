@@ -1,22 +1,26 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-
-const api = 'https://norma.nomoreparties.space/api';
+const API = 'https://norma.nomoreparties.space/api';
 
 const checkResult = res => {
   return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
 };
 
 const request = async (url, params) => {
-  const res = await fetch(`${api}${url}`, params);
+  const res = await fetch(`${API}${url}`, params);
   return checkResult(res);
 };
 
-export const getIngredients = createAsyncThunk(
-  '/ingredients', 
-  async () => {
-    const result = await request('/ingredients');
-    return result;
-});
+export const getIngredients = async () => {
+  try {
+    const res = await fetch(API + '/ingredients')
+    const result = await checkResult(res)
+    return({
+      result: result.data,
+      success: true
+    })
+  } catch (err) {
+    throw new Error(err)
+  }
+};
 
 export const createOrder = (ingredients) => {
   return request('/orders', {
@@ -30,7 +34,7 @@ export const createOrder = (ingredients) => {
 };
 
 export const getOrder = (number) => {
-  return request(`/orders/${number}`, {
+  return request(`/orders/${number}`, { 
     method: 'GET'
   })
 };

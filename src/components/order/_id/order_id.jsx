@@ -10,7 +10,6 @@ import {
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getOrder } from '../../../utils/api';
-import { array } from 'prop-types';
 
 const getIngredientsId = (array) => {
     return array.filter(item => item).map(item => item._id);
