@@ -1,24 +1,57 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getIngredients } from "../utils/api";
+
+export const loadIngredients = createAsyncThunk(
+    'loadIngredients',
+    async() => {
+        try {
+            const res = await getIngredients();
+            if (res && res.success) {
+                return res.result;
+            } else {
+                throw new Error('Failed to fetch items');
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+);
 
 const initialState = {
     ingredients: [],
     hasError: false,
-    errorMessage: ''
+    loading: false
 };
 
 export const ingredientsSlice = createSlice({
     name: 'ingredientsData',
     initialState,
-    reducers: {
-        setIngredients: (state, action) => {
-            state.ingredients = action.payload
-        },
-        setError: (state, action) => {
-            state.hasError = action.payload.hasError
-            state.errorMessage = action.payload.errorMessage
-        }
-    },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(loadIngredients.fulfilled, (state, action) => {
+                return {
+                ...state,
+                ingredients: action.payload,
+                loading: false,
+                hasError: false,
+                };
+            })
+            .addCase(loadIngredients.pending, (state) => {
+                return {
+                ...state,
+                loading: true,
+                hasError: false,
+                };
+            })
+            .addCase(loadIngredients.rejected, (state) => {
+                return {
+                ...state,
+                loading: false,
+                hasError: true,
+                };
+            });
+      },
 });
 
-export const ingredientsAction = ingredientsSlice.actions;
 export const ingredientsReducer = ingredientsSlice.reducer;

@@ -16,3 +16,22 @@
 .title {
   width: 640px;
 }
+
+.card {
+  max-width: 640px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.card_fullScrin {
+  width: 100vw;
+  height: calc(100vh - 88px);
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+}

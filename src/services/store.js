@@ -3,12 +3,48 @@ import { burgerReducer } from "./burger-constructor";
 import { ingredientsReducer } from "./ingredients";
 import { modalReducer } from "./modal";
 import { orderReducer } from "./order-details";
+import { ordersReducer } from "./orders";
+import { feedReducer } from "./feed";
+import { userReducer } from "./user";
+import { socketMiddleware } from "./socketMiddleware";
+import { 
+    setOrders,
+    setOrdersSocketConnectionStatus,
+    ordersWebSocketStart,
+    ordersWebSocketStop
+} from "./orders";
+import { 
+    setFeed,
+    setFeedSocketConnectionStatus,
+    feedWebSocketStart,
+    feedWebSocketStop
+} from "./feed";
 
 export const store = configureStore({
     reducer: {
         burgerData: burgerReducer,
         ingredientsData: ingredientsReducer,
         modalData: modalReducer,
-        orderData: orderReducer
+        orderData: orderReducer,
+        ordersData: ordersReducer,
+        feedData: feedReducer,
+        userData: userReducer
     },
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+        .concat(socketMiddleware({
+            onStart: feedWebSocketStart,
+            onStop: feedWebSocketStop,
+            onOpen: setFeedSocketConnectionStatus,
+            onMessage: setFeed,
+            onClose: setFeedSocketConnectionStatus,
+            onError: setFeedSocketConnectionStatus,
+        }), 
+        socketMiddleware({
+            onStart: ordersWebSocketStart,
+            onStop: ordersWebSocketStop,
+            onOpen: setOrdersSocketConnectionStatus,
+            onMessage: setOrders,
+            onClose: setOrdersSocketConnectionStatus,
+            onError: setOrdersSocketConnectionStatus,
+        }))  
 });

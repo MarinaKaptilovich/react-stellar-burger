@@ -1,35 +1,26 @@
-import { 
-  useMemo,
-  useState 
-} from "react";
+import { useMemo } from "react";
 import { 
   Button, 
   ConstructorElement, 
   CurrencyIcon, 
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-constructor.module.css';
-import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 import ConstructorItem from "../constructor-item/constructor-item";
 import { useActions } from "../../utils/use-actions";
 import { getOrder } from "../../services/order-details";
+import { 
+  useLocation,
+  useNavigate
+} from "react-router-dom";
 
 export default function BurgerConstructor() {
   const burgerData = useSelector(state => state.burgerData);
   const { addBun, addFilling } = useActions();
   const dispatch = useDispatch();
-
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-
-  const openOrderModal = () => {
-    setIsOrderModalOpen(true);
-  };
-  
-  const closeOrderModal = () => {
-    setIsOrderModalOpen(false);
-  };
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [, drop] = useDrop(() => ({
     accept: 'ingredient',
@@ -61,13 +52,13 @@ export default function BurgerConstructor() {
     const totalIngredients = [...bun, ...fillings]
     if (totalIngredients.length >= 1) {
       dispatch(getOrder(totalIngredients))
-      openOrderModal()
+      navigate('/order',{state: { background: location }})
     }
   }
 
   return(
     <section className={`mt-25 ${styles.section}`} ref={drop}>
-      <div className={`custom-scroll pr-2 ${styles.constructor}`}>
+      <div className={styles.constructor}>
         {bun.length > 0 && (
           <ConstructorElement
             type="top"
@@ -114,12 +105,7 @@ export default function BurgerConstructor() {
           Оформить заказ
         </Button>
       </div>
-      
-      {isOrderModalOpen && (
-        <Modal toggle={closeOrderModal} opened={isOrderModalOpen}>
-          <OrderDetails />
-        </Modal>
-      )}
+
     </section>
   );
 }

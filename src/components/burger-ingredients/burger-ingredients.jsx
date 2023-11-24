@@ -7,9 +7,6 @@ import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import Ingredient from '../ingredient/ingredient';
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-
 
 export default function BurgerIngredients() {
   const ingredients = useSelector(state => state.ingredientsData.ingredients);
@@ -42,18 +39,6 @@ export default function BurgerIngredients() {
     }
   };
 
-  const [modalIngredient, setModalIngredient] = useState(null);
-  const [isIngredientModalOpen, setIsIngredientModalOpen] = useState(false);
-
-  const openIngredientModal = (ingredient) => {
-    setModalIngredient(ingredient);
-    setIsIngredientModalOpen(true);
-  };
-  
-  const closeIngredientModal = () => {
-    setIsIngredientModalOpen(false);
-  };
-
   return (
     <section className={`pt-10 main-block ${styles.section}`}>
       <h1 className="text text_type_main-large pb-5">Соберите бургер</h1>
@@ -75,7 +60,7 @@ export default function BurgerIngredients() {
           active={currentTab === 'sauce'} 
           onClick={() => {
             setCurrentTab('bun');
-            bunRef.current.scrollIntoView({
+            sauceRef.current.scrollIntoView({
               behavior: 'smooth',
               block: 'start'
             });
@@ -87,7 +72,7 @@ export default function BurgerIngredients() {
           active={currentTab === 'main'} 
           onClick={() => {
             setCurrentTab('bun');
-            bunRef.current.scrollIntoView({
+            mainRef.current.scrollIntoView({
               behavior: 'smooth',
               block: 'start'
             });
@@ -105,13 +90,10 @@ export default function BurgerIngredients() {
               Булки
             </p>
             <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
-              {buns.map((ingredient, index)=> (
+              {buns.map((ingredient)=> (
                 <Ingredient
-                  key={index}
+                  key={ingredient._id}
                   ingredientData={ingredient}
-                  onModalOpen={() => {
-                    openIngredientModal(ingredient)
-                  }}
                 />
               ))}
             </div>
@@ -122,13 +104,10 @@ export default function BurgerIngredients() {
               Соусы
             </p>
             <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
-              {sauces.map((ingredient, index) => (
+              {sauces.map((ingredient) => (
                 <Ingredient
-                  key={index}
+                  key={ingredient._id}
                   ingredientData={ingredient}
-                  onModalOpen={() => {
-                    openIngredientModal(ingredient)
-                  }}
                 />
               ))}
             </div>
@@ -139,28 +118,16 @@ export default function BurgerIngredients() {
               Начинки
             </p>
             <div className={`pt-6 pb-10 pl-4 pr-1 ${styles.ingredients}`}>
-              {mains.map((ingredient, index)=> (
+              {mains.map((ingredient)=> (
                 <Ingredient
-                  key={index}
+                  key={ingredient._id}
                   ingredientData={ingredient}
-                  onModalOpen={() => {
-                    openIngredientModal(ingredient)
-                  }}
                 />
               ))}
             </div>
           </div>
       </div>
 
-      {isIngredientModalOpen && (
-        <Modal
-          title="Детали ингредиента"
-          toggle={closeIngredientModal}
-          opened={isIngredientModalOpen}
-        >
-          <IngredientDetails ingredient={modalIngredient} />
-        </Modal>
-      )}
     </section>
   )
 }

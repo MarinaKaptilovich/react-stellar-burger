@@ -1,25 +1,20 @@
 import PropTypes from "prop-types";
 import styles from "./modal-overlay.module.css"
 
-function ModalOverlay({  opened, toggle }) {
-  const overlayClickHandler = () => {
-    if (opened) {
-      toggle(); 
-    }
-  };
+export default function ModalOverlay({  children, toggle }) {
 
   return (
     <section 
-      className={`${styles.overlay} ${!opened && styles.hidden}`}
-      onClick={overlayClickHandler}
+      className={`${styles.overlay}`}
+      onClick={toggle}
     >
+      {children}
     </section>
   )
 }
   
 ModalOverlay.propTypes = {
-  opened: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
   toggle: PropTypes.func.isRequired,
 }
   
-export default ModalOverlay;

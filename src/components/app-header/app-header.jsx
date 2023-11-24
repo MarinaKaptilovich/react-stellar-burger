@@ -5,27 +5,43 @@ import {
     Logo 
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./app-header.module.css";
+import { 
+    NavLink,
+    Link,
+    useLocation
+} from "react-router-dom";
 
-const NavLink = (props) => (
-    <a href="#" className={`pl-5 pr-5 pt-4 pb-4 ${styles.nav__link}`}>
-        {props.icon}
-        <p className="text text_type_main-default">{props.text}</p>
-    </a>
-)
+export default function AppHeader() {
+    const { pathname } = useLocation();
 
-function AppHeader() {
     return (
         <header className={`pt-4 pb-4 ${styles.header}`}>
             <div className={styles.content}> 
                 <nav className={styles.nav}>
-                    <NavLink href="#" text='Конструктор' icon={ <BurgerIcon type="secondary" /> } />
-                    <NavLink href="#" text='Лента заказов' icon={ <ListIcon type="secondary" /> } />
+                    <NavLink 
+                        to='/'
+                        type={pathname === '/' ? 'primary' : 'inactive'}
+                        className={styles.nav__link}
+                    >
+                        <BurgerIcon type={pathname === '/' ? 'primary' : 'secondary' } />Конструктор
+                    </NavLink>
+                    <NavLink 
+                        to='/feed'
+                        type="inactive"
+                        className={styles.nav__link}
+                    >
+                        <ListIcon type='secondary' />Лента заказов
+                    </NavLink>
                 </nav>
-                <a href="#" className={styles.logo}><Logo alt="Логотип" /></a>
-                <NavLink href="#" text='Личный кабинет' icon={ <ProfileIcon type="secondary" /> } />
+                <Link to='' className={styles.logo}><Logo alt="Логотип" /></Link>
+                <NavLink 
+                    to='/profile'
+                    type={pathname.includes('/profile') ? 'primary' : 'inactive' }
+                    className={styles.nav__link}
+                >
+                    <ProfileIcon type={pathname.includes('/profile') ? 'primary' : 'secondary' } />Личный кабинет
+                </NavLink>
             </div>
         </header>
     );
 }
-  
-export default AppHeader;

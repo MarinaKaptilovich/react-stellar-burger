@@ -3,17 +3,10 @@ import {
     createAsyncThunk
 } from "@reduxjs/toolkit";
 
-import { createOrder } from "../utils/api";
+import { requestGetOrderWithRefresh } from "../utils/api";
 
 const getIngredientsId = (array) => {
-    return array.reduce((total, item) => {
-        if (item) {
-            return [...total, item._id]
-        }
-        else {
-            return total;
-        }
-    }, [])
+    return array.filter(item => item).map(item => item._id);
 };
 
 const initialState = {
@@ -22,14 +15,15 @@ const initialState = {
         number: null
     },
     status: '',
-    success: false
+    success: false,
+    loaderActive: false
 };
 
 export const getOrder = createAsyncThunk(
     'getOrderData',
     async (ingredients) => {
         const ingredientsId = getIngredientsId(ingredients);
-        const orderData = await createOrder(ingredientsId);
+        const orderData = await requestGetOrderWithRefresh(ingredientsId);
         return orderData;
     }
 );
@@ -41,28 +35,31 @@ export const orderSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getOrder.pending, (state) => {
-                state.status = 'loading'
+               return {
+                ...state,
+                loaderActive: true
+               }
             })
             .addCase(getOrder.fulfilled, (state, action) => {
                 return {
-                    ...state,
                     name: action.payload.name,
                     order: {
                         number: action.payload.order.number
                     },
                     status: 'loaded',
-                    success: action.payload.success
+                    success: action.payload.success,
+                    loaderActive: false
                 }
             })
             .addCase(getOrder.rejected, (state) => {
                 return {
-                    ...state,
                     name: '',
                     order: {
                         number: null
                     },
                     status: 'rejected',
-                    success: false
+                    success: false,
+                    loaderActive: false
                 }
             })
     }
