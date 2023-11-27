@@ -38,6 +38,14 @@ export default function App() {
   const dispatch = useDispatch();
   const location = useLocation();
 
+  if(location.pathname !== '/feed') {
+    dispatch({type: 'FEED_WS_CONNECTION_STOP'})
+  }
+
+  if(location.pathname !== '/profile/orders') {
+    dispatch({type: 'PROFILE_ORDERS_WS_CONNECTION_STOP'})
+  }
+
   const background = location.state && location.state.background;
 
   useEffect(() => dispatch(loadIngredients()), []);

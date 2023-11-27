@@ -14,142 +14,111 @@ const initialState = {
     loaderActive: false
 };
 
-export const getUser = () => {
-    return (dispatch) => {
-        return requestGetUserWithRefresh()
-            .then((res) => {
-                dispatch(setLoaderActive(true))
-                return res;
-            })
-            .then((res) => {
-                dispatch(setUser(res.user));
-            });
-    };
+const getIngredientsId = (array) => {
+    return array.filter(item => item).map(item => item._id);
 };
 
-export const changeUser = createAsyncThunk(
-    "user/change",
-    async (data) => {
-        const res = await requestChangeUserWithRefresh(data);
-        return res.user;
-    }
-);
+// Утилита для упрощения создания редукторов
+const createSimpleReducer = (stateField) => (state, action) => {
+    state[stateField] = action.payload;
+};
 
-export const checkUserAuth = () => {
-    return (dispatch) => {
-        if (localStorage.getItem("accessToken")) {
-            dispatch(getUser())
-                .catch(() => {
-                    localStorage.removeItem("accessToken");
-                    localStorage.removeItem("refreshToken");
-                    dispatch(setUser(null));
-                })
-                .finally(() => {
-                    dispatch(setAuthChecked(true));
-                    dispatch(setLoaderActive(false))
-                });
-        } else {
-            dispatch(setAuthChecked(true));
+// Утилита для упрощения создания асинхронных экшенов
+const createAsyncThunkWithLoader = (name, asyncThunk) => {
+    return createAsyncThunk(`user/${name}`, async (data, thunkAPI) => {
+        try {
+            thunkAPI.dispatch(setLoaderActive(true));
+            const result = await asyncThunk(data, thunkAPI);
+            thunkAPI.dispatch(setLoaderActive(false));
+            return result;
+        } catch (error) {
+            thunkAPI.dispatch(setLoaderActive(false));
+            throw error;
         }
-    };
+    });
 };
 
-export const login = createAsyncThunk(
-    "user/login",
-    async (data) => {
-        const res = await requestLogin(data);
-        localStorage.setItem("accessToken", res.accessToken);
-        localStorage.setItem("refreshToken", res.refreshToken);
-        return res.user;
-    }
-);
+export const getUser = createAsyncThunkWithLoader('getUser', async (ingredients, thunkAPI) => {
+    const ingredientsId = getIngredientsId(ingredients);
+    const orderData = await requestGetUserWithRefresh(ingredientsId);
+    return orderData;
+});
 
-export const logout = createAsyncThunk(
-    "user/logout",
-    async () => {
-        await requestLogout();
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+export const changeUser = createAsyncThunkWithLoader('changeUser', async (data) => {
+    const res = await requestChangeUserWithRefresh(data);
+    return res.user;
+});
+
+export const checkUserAuth = createAsyncThunkWithLoader('checkUserAuth', async (_, thunkAPI) => {
+    if (localStorage.getItem("accessToken")) {
+        await thunkAPI.dispatch(getUser())
+            .catch(() => {
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("refreshToken");
+                thunkAPI.dispatch(setUser(null));
+            });
     }
-);
+
+    thunkAPI.dispatch(setAuthChecked(true));
+});
+
+export const login = createAsyncThunkWithLoader('login', async (data) => {
+    const res = await requestLogin(data);
+    localStorage.setItem("accessToken", res.accessToken);
+    localStorage.setItem("refreshToken", res.refreshToken);
+    return res.user;
+});
+
+export const logout = createAsyncThunkWithLoader('logout', async (_, thunkAPI) => {
+    await requestLogout();
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+});
 
 export const userSlice = createSlice({
     name: 'userData',
     initialState,
     reducers: {
-        setAuthChecked: (state, action) => {
-            state.isAuthChecked = action.payload
-        },
-        setUser: (state, action) => {
-            state.user = action.payload
-        },
-        setLoaderActive: (state, action) => {
-            state.loaderActive = action.payload
-        }
+        setAuthChecked: createSimpleReducer('isAuthChecked'),
+        setUser: createSimpleReducer('user'),
+        setLoaderActive: createSimpleReducer('loaderActive')
     },
       extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
-                return {
-                    ...state,
-                    user: action.payload,
-                    isAuthChecked: true,
-                    loaderActive: false
-                }
+                state.user = action.payload
+                state.isAuthChecked = true
+                state.loaderActive = false
             })
             .addCase(login.pending, (state) => {
-                return {
-                    ...state,
-                    loaderActive: true
-                }
+                state.loaderActive = true
             })
             .addCase(login.rejected, (state) => {
-                return {
-                    ...state,
-                    isError: true,
-                    loaderActive: false
-                }
+                state.isError = true
+                state.loaderActive = false
             })
             .addCase(logout.fulfilled, (state) => {
-                return {
-                    ...state,
-                    user: null,
-                    isAuthChecked: false,
-                    loaderActive:false
-                }
+                state.user = null
+                state.isAuthChecked = false
+                state.loaderActive = false
             })
             .addCase(logout.pending, (state) => {
-                return {
-                    ...state,
-                    loaderActive: true
-                }
+                state.loaderActive = true
             })
             .addCase(logout.rejected, (state) => {
-                return {
-                    ...state,
-                    isError: true,
-                    loaderActive: false
-                }
+                state.isError = true
+                state.loaderActive = false
             })
             .addCase(changeUser.fulfilled, (state, action) => {
-                return {
-                    ...state,
-                    user: action.payload,
-                    loaderActive: false
-                }
+                state.user = action.payload
+                state.loaderActive = false
             })
             .addCase(changeUser.pending, (state) => {
-                return {
-                    ...state,
-                    loaderActive: true
-                }
+                state.loaderActive = true
             })
             .addCase(changeUser.rejected, (state) => {
-                return {
-                    ...state,
-                    isError: true,
-                    loaderActive: false
-                }
+                state.isError = true
+                state.loaderActive = false
             })
       }
 });

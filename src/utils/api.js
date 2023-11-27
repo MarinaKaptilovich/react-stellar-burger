@@ -1,29 +1,35 @@
-const API = 'https://norma.nomoreparties.space/api';
-
-const checkResult = res => {
-  return res.ok ? res.json() : res.json().then(err => Promise.reject(err));
+const api = {
+  ingredientsUrl: 'https://norma.nomoreparties.space/api/ingredients',
+  orderUrl: 'https://norma.nomoreparties.space/api/orders'
 };
 
-const request = async (url, params) => {
-  const res = await fetch(`${API}${url}`, params);
-  return checkResult(res);
+function checkResult(res) {
+  if (!res.ok) {
+    return Promise.reject(`Ошибка: ${res.message}`);
+  }
+  return res.json();
 };
 
-export const getIngredients = async () => {
+function request(url, params) {
+  return fetch(url, params)
+    .then(res => checkResult(res))
+};
+
+export async function getIngredients() {
   try {
-    const res = await fetch(API + '/ingredients')
+    const res = await fetch(api.ingredientsUrl)
     const result = await checkResult(res)
     return({
       result: result.data,
       success: true
     })
   } catch (err) {
-    throw new Error(err)
+    return new Error(err)
   }
 };
 
-export const createOrder = (ingredients) => {
-  return request('/orders', {
+export function createOrder(ingredients) {
+  return request(api.orderUrl, {
     method: 'POST',
     body: JSON.stringify({ ingredients }),
     headers: {
@@ -33,14 +39,14 @@ export const createOrder = (ingredients) => {
   });
 };
 
-export const getOrder = (number) => {
-  return request(`/orders/${number}`, { 
+export function getOrder(number) {
+  return request(`${api.orderUrl}/${number}`, { 
     method: 'GET'
   })
 };
 
-export const requestRefreshToken = () => {
-  return request('/auth/token', {
+export function requestRefreshToken() {
+  return request('https://norma.nomoreparties.space/api/auth/token', {
     method: 'POST',
     body: JSON.stringify({
       token: localStorage.getItem('refreshToken')
@@ -51,28 +57,35 @@ export const requestRefreshToken = () => {
   });
 };
 
-export async function requestGetOrderWithRefresh(ingredients) {
-  try {
-    return await createOrder(ingredients);
-  } catch (error) {
+export function requestGetOrderWithRefresh(ingredients) {
+  return createOrder(ingredients)
+   .catch((error) => {
     if (error.message === 'jwt expired') {
       requestRefreshToken()
         .then((res) => {
           localStorage.setItem("refreshToken", res.refreshToken);
           localStorage.setItem("accessToken", res.accessToken);
-        });
-      return createOrder();
+        })
+        .then(() => {
+          return createOrder(ingredients)
+            .catch((err) => {
+              return Promise.reject(err)
+          })
+        })
+        .catch((err) => {
+          return Promise.reject(err)
+        })
     }
-  }
+  })
 };
 
-export const requestRegister = ({ email, password, name }) => {
-  return request('/auth/register', {
+export function requestRegister(data) {
+  return request('https://norma.nomoreparties.space/api/auth/register', {
     method: 'POST',
     body: JSON.stringify({
-      email,
-      password,
-      name
+      email: data.email,
+      password: data.password,
+      name: data.name
     }),
     headers: {
       'Content-type': 'application/json'
@@ -80,8 +93,8 @@ export const requestRegister = ({ email, password, name }) => {
   });
 };
 
-export const requestLogin = (data) => {
-  return request('/auth/login', {
+export function requestLogin(data) {
+  return request('https://norma.nomoreparties.space/api/auth/login', {
     method: 'POST',
     body: JSON.stringify({
       email: data.email,
@@ -93,8 +106,8 @@ export const requestLogin = (data) => {
   });
 };
 
-export const requestLogout = () => {
-  return request('/auth/logout', {
+export function requestLogout() {
+  return request('https://norma.nomoreparties.space/api/auth/logout', {
     method: 'POST',
     body: JSON.stringify({
       token: localStorage.getItem('refreshToken')
@@ -105,66 +118,80 @@ export const requestLogout = () => {
   });
 };
 
-export const requestGetUser = () => {
-  return request('/auth/user', {
+export function requestGetUser() {
+  return request('https://norma.nomoreparties.space/api/auth/user', {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json;charset=utf-8',
       authorization: localStorage.getItem('accessToken')
     }
   });
 };
 
-export const requestGetUserWithRefresh = async () => {
-  try {
-    return await requestGetUser();
-  } catch (error) {
-    if (error.message === 'jwt expired') {
-      requestRefreshToken()
-        .then((res) => {
-          localStorage.setItem("refreshToken", res.refreshToken);
-          localStorage.setItem("accessToken", res.accessToken);
+export function requestGetUserWithRefresh() {
+  return requestGetUser()
+    .catch((error) => {
+      if (error.message === 'jwt expired') {
+        requestRefreshToken()
+          .then((res) => {
+            localStorage.setItem("refreshToken", res.refreshToken);
+            localStorage.setItem("accessToken", res.accessToken);
+          })
+        .then(() => {
+          return requestGetUser()
+            .catch((err) => {
+              return Promise.reject(err)
+            })
         })
-      return requestGetUser();
-    }
-  }
+        .catch((err) => {
+          return Promise.reject(err)
+        })
+      }
+  })
 };
 
-export const requestChangeUser = ({ name, email, password }) => {
-  return request('/auth/user', {
+export function requestChangeUser(data) {
+  return request('https://norma.nomoreparties.space/api/auth/user', {
     method: 'PATCH',
     body: JSON.stringify({
-      name,
-      email,
-      password
+      name: data.name,
+      email: data.login,
+      password: data.password
     }),
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json;charset=utf-8',
       authorization: localStorage.getItem('accessToken')
     }
   });
 };
 
-export const requestChangeUserWithRefresh = async (data) => {
-  try {
-    return await requestChangeUser(data);
-  } catch (error) {
-    if (error.message === 'jwt expired') {
-      requestRefreshToken()
-        .then((res) => {
-          localStorage.setItem("refreshToken", res.refreshToken);
-          localStorage.setItem("accessToken", res.accessToken);
+export function requestChangeUserWithRefresh(data) {
+  return requestChangeUser(data)
+    .catch((error) => {
+      if (error.message === 'jwt expired') {
+        requestRefreshToken()
+          .then((res) => {
+            localStorage.setItem("refreshToken", res.refreshToken);
+            localStorage.setItem("accessToken", res.accessToken);
+          })
+        .then(() => {
+          return requestChangeUser(data)
+            .catch((err) => {
+              return Promise.reject(err)
+            })
         })
-      return requestChangeUser(data);
-    }
-  }
+        .catch((err) => {
+          return Promise.reject(err)
+        })
+      }
+  })
 };
 
-export const requestForgotPassword = (data) => {
-  return request('/password-reset', {
+export function requestForgotPassword(data) {
+  return request('https://norma.nomoreparties.space/api/password-reset', {
     method: 'POST',
     body: JSON.stringify({
-      email: data.email
+      email: data
     }),
     headers: {
       'Content-type': 'application/json'
@@ -172,12 +199,12 @@ export const requestForgotPassword = (data) => {
   });
 };
 
-export const requestResetPassword = ({ password, token }) => {
-  return request('/password-reset/reset', {
+export function requestResetPassword(data) {
+  return request('https://norma.nomoreparties.space/api/password-reset/reset', {
     method: 'POST',
     body: JSON.stringify({
-      password,
-      token
+      password: data.password,
+      token: data.token
     }),
     headers: {
       'Content-type': 'application/json'

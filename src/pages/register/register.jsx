@@ -16,7 +16,7 @@ export default function Register() {
 
     function submitHandler(event) {
         event.preventDefault();
-        requestRegister({ email: email, password: password, name: name });
+        requestRegister({email: email, password: password, name: name});
     };
 
     return (

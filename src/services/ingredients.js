@@ -4,15 +4,11 @@ import { getIngredients } from "../utils/api";
 export const loadIngredients = createAsyncThunk(
     'loadIngredients',
     async() => {
-        try {
-            const res = await getIngredients();
-            if (res && res.success) {
-                return res.result;
-            } else {
-                throw new Error('Failed to fetch items');
-            }
-        } catch (err) {
-            throw err;
+        const res = await getIngredients();
+        if (res && res.success) {
+            return res.result;
+        } else {
+            throw new Error('Failed to fetch items');
         }
     }
 );

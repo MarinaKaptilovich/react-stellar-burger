@@ -15,11 +15,13 @@ import { requestResetPassword } from '../../utils/api';
 export default function ResetPassword() {
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
+    const [success, setSuccess] = useState({hasSuccess: false, successMessage: ''});
     const location = useLocation();
 
     function submitHandler(event) {
         event.preventDefault();
-        requestResetPassword({ password: password, token: token })
+        const res = requestResetPassword({ password: password, token: token })
+        setSuccess({hasSuccess: res.success, successMessage: res.message})
         .catch((error) => {
             console.error(error);
         })
@@ -60,6 +62,12 @@ export default function ResetPassword() {
                 >
                     Сохранить
                 </Button>
+
+                {success.hasSuccess && (
+                    <p className="text text_type_main-default text_color_inactive mt-4">
+                        {success.successMessage}
+                    </p>
+                )}
 
                 <div className={styles.container}>
                     <p className='text text_type_main-default text_color_inactive mt-20'>

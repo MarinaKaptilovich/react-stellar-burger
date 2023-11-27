@@ -23,11 +23,7 @@ export default function Order({ order }) {
     }, 0);
         
     const date = () => {
-        const dateFromServer = order.createdAt
-        return <FormattedDate 
-            date={new Date(dateFromServer)} 
-            className='text text_type_main-default text_color_inactive'
-        />
+        <FormattedDate date={new Date(order.createdAt)} className='text text_type_main-default text_color_inactive'/>
     };
 
     let url 
@@ -64,10 +60,21 @@ export default function Order({ order }) {
                         </div>
                     }
                     <div className={styles.order_summary}>
-                        <ul className={styles.ingrediences}>
-                            {currentIngredients.map((item, index) => (
-                            <li className={styles.ingredient} key={index} style={{ zIndex: 6 - index, backgroundImage: `url(${item.image_mobile})` }}></li>
-                            ))}
+                        <ul className={styles.ingredients}>
+                            {currentIngredients.map((item, index, array) => {
+                                if (index <=4) {
+                                    const zIndex = 6 - index
+                                    return <li className={styles.ingredient} key={index} style={{ zIndex: 6 - index, backgroundImage: `url(${item.image_mobile})` }} />
+                                }
+                                return null
+                            })}
+                            {currentIngredients.length > 5 &&
+                                <li className={styles.ingredient_counter} style={{zIndex: 1, backgroundImage: `url(${currentIngredients[5].image_mobile})`}}>
+                                    <p className={`${styles.ingredient_counter} text text_type_main-default`}>
+                                        {`+${currentIngredients.length - 5}`}
+                                    </p>
+                                </li>
+                            }
                         </ul>
                         <div className={styles.price}>
                             <p className="text text_type_digits-default">{orderPrice}</p>
