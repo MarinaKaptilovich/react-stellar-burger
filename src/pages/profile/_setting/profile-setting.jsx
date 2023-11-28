@@ -1,21 +1,52 @@
 import styles from './profile-setting.module.css';
-import { useState } from "react";
+import { 
+    useState,
+    useRef,
+    useEffect 
+} from "react";
 import { 
     Input,
     PasswordInput,
     EmailInput,
     Button 
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
+import { 
+    useDispatch,
+    useSelector
+} from 'react-redux';
 import { changeUser } from '../../../services/user';
 
 export default function ProfileSetting() {
     const dispatch = useDispatch();
 
+    const user = useSelector(store => store.userData.user);
+
     const [name, setName] = useState({ active: true, value: '' });
     const [password, setPassword] = useState({ active: true, value: '' });
     const [email, setEmail] = useState({ active: true, value: '' });
     const [buttonState, setButtonState] = useState(false);
+
+    useEffect(() => {
+        setName({ active: true, value: user.name })
+        setEmail({ active: true, value: user.email })
+    }, []);
+
+    const nameRef = useRef(null);
+
+    function nameClickHandler() {
+        setName({ ...name, active: !name.active })
+        if (nameRef.current !== document.activeElement) {
+            setTimeout(() => nameRef.current.focus(), 100)
+        }
+    };
+
+    function emailClickHandler() {
+        setEmail({ ...email, active: !email.active })
+    };
+
+    function passwordClickHandler() {
+        setPassword({ ...password, active: !password.active })
+    };
 
     function clickCancelHandler() {
         setName({ ...name, value: '' })
@@ -42,6 +73,8 @@ export default function ProfileSetting() {
                 icon={'EditIcon'}
                 name={'name'}
                 disabled={name.active}
+                onIconClick={nameClickHandler}
+                ref={nameRef}
                 onChange={(e) => {
                     setButtonState(true)
                     setName({ ...name, value: e.target.value })
@@ -54,6 +87,7 @@ export default function ProfileSetting() {
                 icon={'EditIcon'}
                 name={'email'}
                 disabled={email.active}
+                onIconClick={emailClickHandler}
                 onChange={(e) => {
                     setButtonState(true)
                     setEmail({ ...email, value: e.target.value })
@@ -66,13 +100,14 @@ export default function ProfileSetting() {
                 icon={'EditIcon'}
                 name={'password'}
                 disabled={password.active}
+                onIconClick={passwordClickHandler}
                 onChange={(e) => {
                     setButtonState(true)
                     setPassword({ ...password, value: e.target.value })
                 }}
             />
             {buttonState && 
-            <>
+            <div className={styles.handlers}>
                 <Button
                     htmlType='button'
                     type='secondary'
@@ -89,7 +124,7 @@ export default function ProfileSetting() {
                 >
                     Сохранить
                 </Button>
-            </>
+            </div>
             }
         </form>
     )

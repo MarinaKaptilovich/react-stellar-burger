@@ -55,12 +55,13 @@
 }
   
 .orders_ready_numbers {
-    display: grid;
-    grid-auto-flow: column;
-    height: 152px;
-    grid-template-columns: repeat(auto-fill,auto);
-    grid-template-rows: repeat(10, auto);
-    overflow: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 322px;
     gap: 8px;
 }
   

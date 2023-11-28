@@ -43,7 +43,8 @@ export default function OrderId() {
     };
 
     const date = () => {
-        <FormattedDate date={new Date(order.data.createdAt)} className='text text_type_main-default text_color_inactive'/>
+        const dateFromServer = order.data.createdAt
+        return <FormattedDate date={new Date(dateFromServer)} className='text text_type_main-default text_color_inactive'/>
     };
 
     return (
@@ -66,7 +67,8 @@ export default function OrderId() {
                     if (count > 1 && index === indexes[0]) {
                         return (
                             <li className={styles.ingredient} key={index}>
-                                <div className={styles.ingredient_image} style={{backgroundImage: `url(${item.image_mobile})`}}></div>
+                                <div className={styles.ingredient_image} style={{backgroundImage: `url(${item.image_mobile})`}} />
+
                                 <h2 className={`${styles.ingredient_title} text text_type_main-default`}>
                                     {item.name}
                                 </h2>

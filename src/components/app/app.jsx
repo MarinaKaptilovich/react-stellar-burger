@@ -106,6 +106,22 @@ export default function App() {
             />
           }
           />
+
+          <Route path="feed/:number" element={
+            <Modal toggle={toggleHandler}>
+              <OrderId />
+            </Modal>
+          }
+          />
+
+          <Route path="profile/orders/:number" element={
+            <Modal toggle={toggleHandler}>
+              <OrderId />
+            </Modal>
+          }
+          />
+
+          <Route path="*" element={<></>} />
         </Routes>
       }
     </>

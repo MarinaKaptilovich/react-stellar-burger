@@ -9,10 +9,9 @@ import {
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const getIngredientsId = (array) => {
-    return array.filter(item => item).map(item => item._id);
+const getIngredientsId = (ingredients, id) => {
+    return ingredients.find(ingredient => ingredient._id === id);
 };
-
 export default function Order({ order }) {
     const location = useLocation();
     const { ingredients } = useSelector(state => state.ingredientsData);
@@ -23,14 +22,15 @@ export default function Order({ order }) {
     }, 0);
         
     const date = () => {
-        <FormattedDate date={new Date(order.createdAt)} className='text text_type_main-default text_color_inactive'/>
+        const dateFromServer = order.createdAt
+        return <FormattedDate date={new Date(dateFromServer)} className='text text_type_main-default text_color_inactive'/>
     };
 
     let url 
         if(location.pathname === '/feed') {
             url = `/feed/${order.number}`
         }
-        if(location.pathname === 'profile/orders') {
+        else if(location.pathname === 'profile/orders') {
             url = `/profile/orders/${order.number}`
         }
     
@@ -44,12 +44,12 @@ export default function Order({ order }) {
                         </p>
                             { date() }
                     </div>
-                    { location.pathname === 'feed' && 
+                    { location.pathname === '/feed' && 
                         <p className={`${styles.order_title} text text_type_main-medium`}>
                             {order.name}
                         </p>
                     }
-                    { location.pathname === 'profile/orders' && 
+                    { location.pathname === '/profile/orders' && 
                         <div className={styles.status}>
                             <p className={`${styles.order_title} text text_type_main-medium`}>
                                 {order.name}
@@ -61,10 +61,10 @@ export default function Order({ order }) {
                     }
                     <div className={styles.order_summary}>
                         <ul className={styles.ingredients}>
-                            {currentIngredients.map((item, index, array) => {
-                                if (index <=4) {
+                            {currentIngredients.map((item, index) => {
+                                if (index <= 4) {
                                     const zIndex = 6 - index
-                                    return <li className={styles.ingredient} key={index} style={{ zIndex: 6 - index, backgroundImage: `url(${item.image_mobile})` }} />
+                                    return <li className={styles.ingredient} key={index} style={{ zIndex: zIndex, backgroundImage: `url(${item.image_mobile})` }} />
                                 }
                                 return null
                             })}
