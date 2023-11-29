@@ -30,7 +30,7 @@ export default function Order({ order }) {
         if(location.pathname === '/feed') {
             url = `/feed/${order.number}`
         }
-        else if(location.pathname === 'profile/orders') {
+        else if(location.pathname === '/profile/orders') {
             url = `/profile/orders/${order.number}`
         }
     

@@ -11,8 +11,8 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getOrder } from '../../../utils/api';
 
-const getIngredientsId = (array) => {
-    return array.filter(item => item).map(item => item._id);
+const getIngredientsId = (array, id) => {
+    return array.find(item => item._id === id)
 };
 
 function findIngredientIndexes(ingredient, array) {

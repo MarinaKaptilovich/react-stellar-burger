@@ -9,6 +9,7 @@ import {
     Outlet
 } from 'react-router-dom';
 import Order from '../../components/order/order';
+import { PROFILE_ORDERS_WS_CONNECTION_START } from '../../services/actions';
 
 export default function Orders() {
     const dispatch = useDispatch();
@@ -20,7 +21,7 @@ export default function Orders() {
 
         if (accessToken) {
             dispatch({
-                type: 'PROFILE_ORDERS_WS_CONNECTION_START',
+                type: PROFILE_ORDERS_WS_CONNECTION_START,
                 payload: `wss://norma.nomoreparties.space/orders?token=${accessToken.split('Bearer ')[1]}`
             });
         }

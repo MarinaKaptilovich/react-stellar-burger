@@ -33,25 +33,30 @@ import {
 
 import { loadIngredients } from "../../services/ingredients";
 
+import { 
+  FEED_WS_CONNECTION_STOP,
+  PROFILE_ORDERS_WS_CONNECTION_STOP
+} from "../../services/actions";
+
 export default function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
 
   if(location.pathname !== '/feed') {
-    dispatch({type: 'FEED_WS_CONNECTION_STOP'})
-  }
+    dispatch({type: FEED_WS_CONNECTION_STOP})
+  };
 
   if(location.pathname !== '/profile/orders') {
-    dispatch({type: 'PROFILE_ORDERS_WS_CONNECTION_STOP'})
-  }
+    dispatch({type: PROFILE_ORDERS_WS_CONNECTION_STOP})
+  };
 
   const background = location.state && location.state.background;
 
   useEffect(() => dispatch(loadIngredients()), []);
 
   const toggleHandler = () => {
-    navigate('/')
+    navigate(-1)
   };
 
   useEffect(() => dispatch(checkUserAuth()), []);
@@ -72,7 +77,7 @@ export default function App() {
           <Route path="/register" element={ <OnlyUnAuth component = { <Register /> } />} />
           <Route path="/forgot-password" element={ <OnlyUnAuth component = { <ForgotPassword /> } /> } />
           <Route path="/reset-password" element={ <OnlyUnAuth component = { <ResetPassword /> } /> } />
-          <Route path="/profile" element={ <OnlyAuth component={ <Profile /> } /> } >
+          <Route path="/profile" element={ <OnlyAuth component={ <Profile /> } /> }>
             <Route index element={ <ProfileSetting /> } />
             <Route path="orders" element={ <Orders /> }>
               <Route path=":number" element={ <OrderId /> } />
@@ -89,9 +94,9 @@ export default function App() {
         <Routes>
           <Route path="/ingredients/:id" element={
             <Modal title='Детали ингредиента' toggle={toggleHandler}>
-            <IngredientDetails fullScrin={false}/>
-          </Modal>
-          }
+              <IngredientDetails fullScrin={false}/>
+            </Modal>
+            }
           />
 
           <Route path="/order" element={
@@ -107,14 +112,14 @@ export default function App() {
           }
           />
 
-          <Route path="feed/:number" element={
+          <Route path="/feed/:number" element={
             <Modal toggle={toggleHandler}>
               <OrderId />
             </Modal>
           }
           />
 
-          <Route path="profile/orders/:number" element={
+          <Route path="/profile/orders/:number" element={
             <Modal toggle={toggleHandler}>
               <OrderId />
             </Modal>

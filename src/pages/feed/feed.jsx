@@ -9,6 +9,7 @@ import {
     useSelector
 } from 'react-redux';
 import Order from '../../components/order/order';
+import { FEED_WS_CONNECTION_START } from '../../services/actions';
 
 export default function Feed() {
     const dispatch = useDispatch();
@@ -16,14 +17,10 @@ export default function Feed() {
     const { orders, total, totalToday } = useSelector(state => state.feedData);
 
     useEffect(() => {
-        const accessToken = localStorage.getItem('accessToken');
-
-        if(accessToken) {
-            dispatch({
-                type: 'FEED_WS_CONNECTION_START',
-                payload: 'wss://norma.nomoreparties.space/orders/all'
-            });
-        }
+        dispatch({
+            type: FEED_WS_CONNECTION_START,
+            payload: 'wss://norma.nomoreparties.space/orders/all'
+        });
     }, []);
 
     return (
