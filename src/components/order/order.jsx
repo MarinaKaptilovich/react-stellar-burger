@@ -63,8 +63,7 @@ export default function Order({ order }) {
                         <ul className={styles.ingredients}>
                             {currentIngredients.map((item, index) => {
                                 if (index <= 4) {
-                                    const zIndex = 6 - index
-                                    return <li className={styles.ingredient} key={index} style={{ zIndex: zIndex, backgroundImage: `url(${item.image_mobile})` }} />
+                                    return <li className={styles.ingredient} key={index} style={{ backgroundImage: `url(${item.image_mobile})` }} />
                                 }
                                 return null
                             })}
