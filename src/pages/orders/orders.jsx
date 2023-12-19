@@ -9,6 +9,7 @@ import {
     Outlet
 } from 'react-router-dom';
 import Order from '../../components/order/order';
+import { PROFILE_ORDERS_WS_CONNECTION_START } from '../../services/actions';
 
 export default function Orders() {
     const dispatch = useDispatch();
@@ -16,10 +17,14 @@ export default function Orders() {
     const { orders } = useSelector(state => state.ordersData);
 
     useEffect(() => {
-        dispatch({
-            type: 'PROFILE_ORDERS_WS_CONNECTION_START', 
-            payload: `wss://norma.nomoreparties.space/orders?token=${localStorage.getItem('accessToken').split('Bearer ')[1]}`
-        })
+        const accessToken = localStorage.getItem('accessToken');
+
+        if (accessToken) {
+            dispatch({
+                type: PROFILE_ORDERS_WS_CONNECTION_START,
+                payload: `wss://norma.nomoreparties.space/orders?token=${accessToken.split('Bearer ')[1]}`
+            });
+        }
     }, []);
 
     return (

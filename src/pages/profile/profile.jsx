@@ -39,8 +39,8 @@ export default function Profile() {
                     </Link>
 
                     <Link
-                        to='/profile/login'
-                        className={`text text_type_main-medium ${location.includes('/orders') ? 'primary': 'inactive'}`}
+                        type='button'
+                        className='text text_type_main-medium text_color_inactive'
                         onClick={onLogout}
                     >
                         Выход

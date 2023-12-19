@@ -9,6 +9,7 @@ import {
     useSelector
 } from 'react-redux';
 import Order from '../../components/order/order';
+import { FEED_WS_CONNECTION_START } from '../../services/actions';
 
 export default function Feed() {
     const dispatch = useDispatch();
@@ -17,9 +18,9 @@ export default function Feed() {
 
     useEffect(() => {
         dispatch({
-            type: 'FEED_WS_CONNECTION_START',
+            type: FEED_WS_CONNECTION_START,
             payload: 'wss://norma.nomoreparties.space/orders/all'
-        })
+        });
     }, []);
 
     return (
@@ -40,13 +41,13 @@ export default function Feed() {
                                         Готовы:
                                     </p>
                                     <div className={styles.orders_ready_numbers}>
-                                        {orders
-                                            .filter(order => order.status === 'done')
-                                            .map(order => (
-                                            <p className="text text_type_digits-default text_color_inactive" key={order._id}>
-                                                {order.number}
-                                            </p>
-                                            ))}
+                                        {orders.map(order => {
+                                            if(order.status === 'done') {
+                                                return <p className="text text_type_digits-default text_color_inactive" key={order._id}>
+                                                    {order.number}
+                                                </p>
+                                            }
+                                        })}
                                     </div>
                                 </div>
                                     <div className={styles.orders_todo}>
@@ -54,13 +55,13 @@ export default function Feed() {
                                             В работе:
                                         </p>
                                     <div className={styles.orders_todo_numbers}>
-                                        {orders
-                                        .filter(order => order.status !== 'done')
-                                        .map(order => (
-                                            <p className="text text_type_digits-default" key={order._id}>
-                                                {order.number}
-                                            </p>
-                                        ))}
+                                        {orders.map(order => {
+                                            if(order.status !== 'done') {
+                                                return <p className="text text_type_digits-default" key={order._id}>
+                                                    {order.number}
+                                                </p>
+                                            }
+                                        })}
                                     </div>
                                 </div>
                             </div>

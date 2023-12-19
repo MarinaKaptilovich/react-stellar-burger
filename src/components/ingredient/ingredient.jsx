@@ -3,7 +3,6 @@ import {
     CurrencyIcon 
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientPropType } from '../../utils/prop-types';
-import PropTypes from "prop-types";
 import styles from './ingredient.module.css';
 import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';

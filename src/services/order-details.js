@@ -42,6 +42,7 @@ export const orderSlice = createSlice({
             })
             .addCase(getOrder.fulfilled, (state, action) => {
                 return {
+                    ...state,
                     name: action.payload.name,
                     order: {
                         number: action.payload.order.number
@@ -53,13 +54,8 @@ export const orderSlice = createSlice({
             })
             .addCase(getOrder.rejected, (state) => {
                 return {
-                    name: '',
-                    order: {
-                        number: null
-                    },
-                    status: 'rejected',
-                    success: false,
-                    loaderActive: false
+                    ...initialState,
+                    status: 'rejected'
                 }
             })
     }

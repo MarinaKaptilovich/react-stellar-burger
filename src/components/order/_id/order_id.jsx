@@ -11,8 +11,8 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getOrder } from '../../../utils/api';
 
-const getIngredientsId = (array) => {
-    return array.filter(item => item).map(item => item._id);
+const getIngredientsId = (array, id) => {
+    return array.find(item => item._id === id)
 };
 
 function findIngredientIndexes(ingredient, array) {
@@ -43,7 +43,8 @@ export default function OrderId() {
     };
 
     const date = () => {
-        <FormattedDate date={new Date(order.data.createdAt)} className='text text_type_main-default text_color_inactive'/>
+        const dateFromServer = order.data.createdAt
+        return <FormattedDate date={new Date(dateFromServer)} className='text text_type_main-default text_color_inactive'/>
     };
 
     return (
@@ -60,26 +61,29 @@ export default function OrderId() {
             <p className={`${styles.order_structure} text text_type_main-medium`}>
                 Состав:
             </p>
-            <ul className={`${styles.ingrediences} custom-scroll`}>
+            <ul className={`${styles.ingredients} custom-scroll`}>
                 {selectedIngredients && selectedIngredients.map((item, index, array) => {
                     const { count, indexes } = findIngredientIndexes(item, array);
-                    return (
-                        count > 1 && (
-                            index === indexes[0] ? (
-                                <li className={styles.ingredient} key={index}>
-                                    <div className={styles.ingredient_image} style={{backgroundImage: `url(${item.image_mobile})`}}></div>
-                                    <h2 className={`${styles.ingredient_title} text text_type_main-default`}>
-                                        {item.name}
-                                    </h2>
-                                    <div className={styles.ingredient_price}>
-                                        <p className="text text_type_digits-default">
+                    if (count > 1 && index === indexes[0]) {
+                        return (
+                            <li className={styles.ingredient} key={index}>
+                                <div className={styles.ingredient_image} style={{backgroundImage: `url(${item.image_mobile})`}} />
+
+                                <h2 className={`${styles.ingredient_title} text text_type_main-default`}>
+                                    {item.name}
+                                </h2>
+                                <div className={styles.ingredient_price}>
+                                    <p className="text text_type_digits-default">
                                         {`${count}x${item.price}`}
-                                        </p>
-                                        <CurrencyIcon type="primary" />
-                                    </div>
-                                </li>
-                            ) : null
-                    ))
+                                    </p>
+                                    <CurrencyIcon type="primary" />
+                                </div>
+                            </li>
+                    )}
+
+                    if (count > 1 && index !== indexes[0]) {
+                        return null
+                    }
                     
                     return (
                         <li className={styles.ingredient} key={index}>

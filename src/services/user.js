@@ -90,66 +90,40 @@ export const userSlice = createSlice({
       extraReducers: (builder) => {
         builder
             .addCase(login.fulfilled, (state, action) => {
-                return {
-                    ...state,
-                    user: action.payload,
-                    isAuthChecked: true,
-                    loaderActive: false
-                }
+                state.user = action.payload
+                state.isAuthChecked = true
+                state.loaderActive = false
             })
             .addCase(login.pending, (state) => {
-                return {
-                    ...state,
-                    loaderActive: true
-                }
+                state.loaderActive = true
             })
             .addCase(login.rejected, (state) => {
-                return {
-                    ...state,
-                    isError: true,
-                    loaderActive: false
-                }
+                state.isError = true
+                state.loaderActive = false
             })
             .addCase(logout.fulfilled, (state) => {
-                return {
-                    ...state,
-                    user: null,
-                    isAuthChecked: false,
-                    loaderActive:false
-                }
+                state.user = null
+                state.isAuthChecked = false
+                state.loaderActive = false
+
             })
             .addCase(logout.pending, (state) => {
-                return {
-                    ...state,
-                    loaderActive: true
-                }
+                state.loaderActive = true
             })
             .addCase(logout.rejected, (state) => {
-                return {
-                    ...state,
-                    isError: true,
-                    loaderActive: false
-                }
+                state.isError =  true
+                state.loaderActive = false
             })
             .addCase(changeUser.fulfilled, (state, action) => {
-                return {
-                    ...state,
-                    user: action.payload,
-                    loaderActive: false
-                }
+                state.user = action.payload
+                state.loaderActive = false
             })
             .addCase(changeUser.pending, (state) => {
-                return {
-                    ...state,
-                    loaderActive: true
-                }
+                state.loaderActive = true
             })
             .addCase(changeUser.rejected, (state) => {
-                return {
-                    ...state,
-                    isError: true,
-                    loaderActive: false
-                }
+                state.isError = true
+                state.loaderActive = false
             })
       }
 });
