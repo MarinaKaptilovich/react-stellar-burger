@@ -7,13 +7,13 @@ import {
     Link,
     useLocation
 } from 'react-router-dom';
-import { usingSelector } from '../../types/hooks';
+import { useAppSelector } from '../../types/hooks';
 import { OrderProps } from '../../types/order';
 import { findIngredientById } from '../../utils/utils';
 
 export default function Order({ order } : OrderProps) {
     const location = useLocation();
-    const { ingredients } = usingSelector(state => state.ingredientsData);
+    const { ingredients } = useAppSelector(state => state.ingredientsData);
     const currentIngredients = ingredients != null && order.ingredients.map(item => findIngredientById(ingredients, item))
     const orderPrice = currentIngredients && currentIngredients.reduce((sum, item) => {
         return sum + item.price

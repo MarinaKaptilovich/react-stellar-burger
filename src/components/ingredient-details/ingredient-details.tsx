@@ -1,5 +1,5 @@
 import styles from "./ingredient-details.module.css";
-import { usingSelector } from "../../types/hooks";
+import { useAppSelector } from "../../types/hooks";
 import { useParams } from "react-router-dom";
 import { 
   IngredientType,
@@ -8,7 +8,7 @@ import {
 import { findIngredientById } from "../../utils/utils";
 
 export default function IngredientDetails({ fullScrin } : IngredientDetailsType) {
-  const ingredients = usingSelector(state => state.ingredientsData.ingredients);
+  const ingredients = useAppSelector(state => state.ingredientsData.ingredients);
   const { id } = useParams();
 
   let ingredient : IngredientType | undefined;

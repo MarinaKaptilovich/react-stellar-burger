@@ -6,8 +6,8 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './burger-constructor.module.css';
 import { 
-  usingDispatch,
-  usingSelector
+  useAppDispatch,
+  useAppSelector
 } from "../../types/hooks";
 import { useDrop } from "react-dnd";
 import ConstructorItem from "../constructor-item/constructor-item";
@@ -20,9 +20,9 @@ import {
 import { IngredientType } from "../../types/ingredients";
 
 export default function BurgerConstructor() {
-  const burgerData = usingSelector(state => state.burgerData);
+  const burgerData = useAppSelector(state => state.burgerData);
   const { addBun, addFilling } = useActions();
-  const dispatch = usingDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 

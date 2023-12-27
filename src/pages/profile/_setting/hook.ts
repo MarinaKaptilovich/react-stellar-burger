@@ -1,14 +1,14 @@
 import React, { useState, ChangeEvent } from 'react';
-import { useFormProps } from '../../../types/hooks';
+import { UseFormProps } from '../../../types/hooks';
 
 interface UseFormReturn {
-    values: useFormProps;
+    values: UseFormProps;
     handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
-    setValues: React.Dispatch<React.SetStateAction<useFormProps>>;
+    setValues: React.Dispatch<React.SetStateAction<UseFormProps>>;
 }
 
-export const useForm = (initialValues: useFormProps): UseFormReturn => {
-    const [values, setValues] = useState<useFormProps>(initialValues);
+export const useForm = (initialValues: UseFormProps): UseFormReturn => {
+    const [values, setValues] = useState<UseFormProps>(initialValues);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
         const { value, name } = event.target;

@@ -7,7 +7,7 @@ import {
     FormattedDate,
     CurrencyIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { usingSelector } from '../../../types/hooks';
+import { useAppSelector } from '../../../types/hooks';
 import { useParams } from 'react-router-dom';
 import { getOrder } from '../../../utils/api';
 import { findIngredientById } from '../../../utils/utils';
@@ -17,7 +17,7 @@ import { WebSocketOrder } from '../../../types/middleware';
 
 export default function OrderId() {
     const { number } = useParams();
-    const { ingredients } = usingSelector(state => state.ingredientsData);
+    const { ingredients } = useAppSelector(state => state.ingredientsData);
     const [order, setOrder] = useState<{ data: WebSocketOrder | null, error: boolean }>(
         {
             data: null,

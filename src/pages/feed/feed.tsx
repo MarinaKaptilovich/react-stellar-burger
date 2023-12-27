@@ -5,22 +5,29 @@ import {
     Outlet
 } from 'react-router-dom';
 import { 
-    usingDispatch,
-    usingSelector
+    useAppDispatch,
+    useAppSelector
 } from '../../types/hooks';
 import Order from '../../components/order/order';
-import { FEED_WS_CONNECTION_START } from '../../services/actions';
+import { 
+    FEED_WS_CONNECTION_START,
+    FEED_WS_CONNECTION_STOP
+} from '../../services/actions';
 
 export default function Feed() {
-    const dispatch = usingDispatch();
+    const dispatch = useAppDispatch();
     const location = useLocation();
-    const { orders, total, totalToday } = usingSelector(state => state.feedData);
+    const { orders, total, totalToday } = useAppSelector(state => state.feedData);
 
     useEffect(() => {
         dispatch({
             type: FEED_WS_CONNECTION_START,
             payload: 'wss://norma.nomoreparties.space/orders/all'
         });
+
+        return () => {
+            dispatch({ type: FEED_WS_CONNECTION_STOP });
+        }
     }, []);
 
     return (

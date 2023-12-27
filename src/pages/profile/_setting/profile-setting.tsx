@@ -8,16 +8,16 @@ import {
     Button 
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { 
-    usingDispatch,
-    usingSelector
+    useAppDispatch,
+    useAppSelector
 } from '../../../types/hooks';
 import { changeUser } from '../../../services/user';
 import { useForm } from './hook';
 
 export default function ProfileSetting() {
-    const dispatch = usingDispatch();
+    const dispatch = useAppDispatch();
 
-    const user = usingSelector(store => store.userData.user);
+    const user = useAppSelector(store => store.userData.user);
 
     const defaultName = user ? user.name : '';
     const defaultEmail = user ? user.email : '';

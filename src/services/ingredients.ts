@@ -11,14 +11,7 @@ import {
 
 export const loadIngredients = createAsyncThunk(
     'loadIngredients',
-    async() => {
-        const res = await getIngredients();
-        if (res) {
-            return res;
-        } else {
-            throw new Error('Failed to fetch items');
-        }
-    }
+    getIngredients
 );
 
 const initialState: IngredientsData = {

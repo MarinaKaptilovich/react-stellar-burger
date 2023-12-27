@@ -1,4 +1,4 @@
-import { usingSelector } from "../../types/hooks";
+import { useAppSelector } from "../../types/hooks";
 import { 
     Navigate,
     useLocation
@@ -6,7 +6,7 @@ import {
 import { ProtectedRouteProps } from "../../types/protected";
 
 const ProtectedElement = ({ component, onlyUnAuth = false } : ProtectedRouteProps) => {
-    const user = usingSelector(store => store.userData.user);
+    const user = useAppSelector(store => store.userData.user);
     const location = useLocation();
 
     if (onlyUnAuth && user) {

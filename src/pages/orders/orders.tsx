@@ -1,20 +1,23 @@
 import styles from './orders.module.css';
 import { useEffect } from 'react';
 import { 
-    usingDispatch,
-    usingSelector
+    useAppDispatch,
+    useAppSelector
 } from '../../types/hooks';
 import { 
     useLocation,
     Outlet
 } from 'react-router-dom';
 import Order from '../../components/order/order';
-import { PROFILE_ORDERS_WS_CONNECTION_START } from '../../services/actions';
+import { 
+    PROFILE_ORDERS_WS_CONNECTION_START,
+    PROFILE_ORDERS_WS_CONNECTION_STOP
+} from '../../services/actions';
 
 export default function Orders() {
-    const dispatch = usingDispatch();
+    const dispatch = useAppDispatch();
     const location = useLocation();
-    const { orders } = usingSelector(state => state.ordersData);
+    const { orders } = useAppSelector(state => state.ordersData);
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
@@ -24,6 +27,10 @@ export default function Orders() {
                 type: PROFILE_ORDERS_WS_CONNECTION_START,
                 payload: `wss://norma.nomoreparties.space/orders?token=${accessToken.split('Bearer ')[1]}`
             });
+
+            return () => {
+                dispatch({ type: PROFILE_ORDERS_WS_CONNECTION_STOP });
+            };
         }
     }, []);
 

@@ -7,8 +7,8 @@ import {
     useLocation
 } from 'react-router-dom';
 import { 
-    usingDispatch,
-    usingSelector
+    useAppDispatch,
+    useAppSelector
 } from '../../types/hooks';
 import { 
     Button, 
@@ -18,8 +18,8 @@ import {
 import { login } from '../../services/user';
 
 export default function Login() {
-    const dispatch = usingDispatch();
-    const error = usingSelector(store => store.userData.isError);
+    const dispatch = useAppDispatch();
+    const error = useAppSelector(store => store.userData.isError);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();

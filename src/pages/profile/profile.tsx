@@ -6,11 +6,11 @@ import {
     Link,
     Outlet
 } from 'react-router-dom';
-import { usingDispatch } from '../../types/hooks';
+import { useAppDispatch } from '../../types/hooks';
 import { logout } from '../../services/user';
 
 export default function Profile() {
-    const dispatch = usingDispatch();
+    const dispatch = useAppDispatch();
     const [active, setActive] = useState(false);
     const location = useLocation().pathname;
 
@@ -22,6 +22,8 @@ export default function Profile() {
 
     return (
         <main className={styles.main}>
+            <section className={styles.section}>
+
             {(location === '/profile' || location === '/profile/orders') &&
             <div className={styles.sidebar}>
                 <nav className={styles.nav}>
@@ -59,6 +61,8 @@ export default function Profile() {
             </div>
             }
             <Outlet />
+            
+            </section>
         </main>
     )
 };

@@ -2,7 +2,7 @@ import {
     useDrag,
     useDrop
 } from "react-dnd";
-import { usingSelector } from "../../types/hooks";
+import { useAppSelector } from "../../types/hooks";
 import { 
     ConstructorElement, 
     DragIcon 
@@ -12,7 +12,7 @@ import styles from './constructor-item.module.css';
 import { IngredientType, IngredientProps } from "../../types/ingredients";
 
 export default function ConstructorItem({ ingredientData } : IngredientProps) {
-    const fillings = usingSelector(state => state.burgerData.fillings);
+    const fillings = useAppSelector(state => state.burgerData.fillings);
     const { sortFilling, deleteFilling } = useActions();
     const dropIndex = fillings.findIndex(item => item.key === ingredientData.key);
 

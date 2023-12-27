@@ -58,11 +58,15 @@ export const socketMiddleware = (wsConfig: WsConfigType) : Middleware<{}, RootSt
                         localStorage.setItem("refreshToken", res.refreshToken);
                         localStorage.setItem("accessToken", res.accessToken);
                       })
-                      .then((res) => {
+                      .then(() => {
                         let token = localStorage.getItem('accessToken')
                         dispatch({
-                        type: 'PROFILE_ORDERS_WS_CONNECTION_START', 
-                        payload: `wss://norma.nomoreparties.space/orders?token=${token ? token.split('Bearer ')[1] : ''}`})
+                          type: 'onStart',
+                          payload: {
+                            url: 'wss://norma.nomoreparties.space/orders',
+                            token: token ? token.split('Bearer ')[1] : '' 
+                          }
+                        });
                       })
                       .catch((err) => {
                         return Promise.reject(err)

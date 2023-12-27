@@ -3,13 +3,13 @@ import {
   useRef
 } from 'react';
 import React from 'react';
-import { usingSelector } from '../../types/hooks';
+import { useAppSelector } from '../../types/hooks';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger-ingredients.module.css';
 import Ingredient from '../ingredient/ingredient';
 
 export default function BurgerIngredients() {
-  const ingredients = usingSelector(state => state.ingredientsData.ingredients);
+  const ingredients = useAppSelector(state => state.ingredientsData.ingredients);
 
   const buns = ingredients != null && ingredients.filter((item) => item.type === 'bun');
   const mains = ingredients != null && ingredients.filter((item) => item.type === 'main');

@@ -9,6 +9,8 @@ import {
 } from "../types/api";
 import { ChangeUserType } from "../types/user"; 
 
+const BASE_URL = 'https://norma.nomoreparties.space/api';
+
 const api = {
   ingredientsUrl: 'https://norma.nomoreparties.space/api/ingredients',
   orderUrl: 'https://norma.nomoreparties.space/api/orders'
@@ -48,12 +50,13 @@ export function createOrder(ingredients:string[]) {
 
 export function getOrder(number: string) {
   return request<RequestGetOrderType>(`${api.orderUrl}/${number}`, { 
-    method: 'GET'
+    method: 'GET',
+    headers: headers
   })
 };
 
 export function requestRefreshToken() {
-  return request<RequestRefreshTokenType>('https://norma.nomoreparties.space/api/auth/token', {
+  return request<RequestRefreshTokenType>(BASE_URL + `/auth/token`, {
     method: 'POST',
     body: JSON.stringify({
       token: localStorage.getItem('refreshToken')
@@ -88,7 +91,7 @@ export function requestGetOrderWithRefresh(ingredients:string[]) {
 };
 
 export function requestRegister(data: { email: string, password: string, name: string}) {
-  return request<RequestUserType>('https://norma.nomoreparties.space/api/auth/register', {
+  return request<RequestUserType>(BASE_URL + `/auth/register`, {
     method: 'POST',
     body: JSON.stringify({
       email: data.email,
@@ -102,7 +105,7 @@ export function requestRegister(data: { email: string, password: string, name: s
 };
 
 export function requestLogin(data: { email:string, password: string }) {
-  return request<RequestUserType>('https://norma.nomoreparties.space/api/auth/login', {
+  return request<RequestUserType>(BASE_URL + `/auth/login`, {
     method: 'POST',
     body: JSON.stringify({
       email: data.email,
@@ -115,7 +118,7 @@ export function requestLogin(data: { email:string, password: string }) {
 };
 
 export function requestLogout() {
-  return request<RequestRefreshUserInfoType>('https://norma.nomoreparties.space/api/auth/logout', {
+  return request<RequestRefreshUserInfoType>(BASE_URL + `/auth/logout`, {
     method: 'POST',
     body: JSON.stringify({
       token: localStorage.getItem('refreshToken')
@@ -127,7 +130,7 @@ export function requestLogout() {
 };
 
 export function requestGetUser() {
-  return request<RequestGetUserType>('https://norma.nomoreparties.space/api/auth/user', {
+  return request<RequestGetUserType>(BASE_URL + `/auth/user`, {
     method: 'GET',
     headers: headers
   });
@@ -157,7 +160,7 @@ export function requestGetUserWithRefresh() {
 };
 
 export function requestChangeUser(data: ChangeUserType) {
-  return request<RequestUserType>('https://norma.nomoreparties.space/api/auth/user', {
+  return request<RequestUserType>(BASE_URL + `/auth/user`, {
     method: 'PATCH',
     body: JSON.stringify({
       name: data.name,
@@ -192,7 +195,7 @@ export function requestChangeUserWithRefresh(data: {name: string, email: string,
 };
 
 export function requestForgotPassword(data: string) {
-  return request<RequestRefreshUserInfoType>('https://norma.nomoreparties.space/api/password-reset', {
+  return request<RequestRefreshUserInfoType>(BASE_URL + `/password-reset`, {
     method: 'POST',
     body: JSON.stringify({
       email: data
@@ -204,7 +207,7 @@ export function requestForgotPassword(data: string) {
 };
 
 export function requestResetPassword(data: { password: string, token: string }) {
-  return request<RequestRefreshUserInfoType>('https://norma.nomoreparties.space/api/password-reset/reset', {
+  return request<RequestRefreshUserInfoType>(BASE_URL + `/password-reset/reset`, {
     method: 'POST',
     body: JSON.stringify({
       password: data.password,

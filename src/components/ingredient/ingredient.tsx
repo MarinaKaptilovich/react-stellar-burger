@@ -3,7 +3,7 @@ import {
     CurrencyIcon 
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ingredient.module.css';
-import { usingSelector } from '../../types/hooks';
+import { useAppSelector } from '../../types/hooks';
 import { useDrag } from 'react-dnd';
 import { 
   useLocation,
@@ -13,7 +13,7 @@ import { IngredientProps } from '../../types/ingredients';
 import { getAmountOfIngredient } from './hook';
 
 export default function Ingredient({ ingredientData } : IngredientProps) {
-  const burgerData =usingSelector(state => state.burgerData);
+  const burgerData = useAppSelector(state => state.burgerData);
   const location = useLocation();
 
    let ingredientAmount;

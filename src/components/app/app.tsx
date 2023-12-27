@@ -1,7 +1,7 @@
 import AppHeader from "../app-header/app-header";
 
 import { useEffect } from "react";
-import { usingDispatch, usingSelector } from "../../types/hooks";
+import { useAppDispatch, useAppSelector } from "../../types/hooks";
 import { 
   useLocation,
   useNavigate,
@@ -33,23 +33,10 @@ import {
 
 import { loadIngredients } from "../../services/ingredients";
 
-import { 
-  FEED_WS_CONNECTION_STOP,
-  PROFILE_ORDERS_WS_CONNECTION_STOP
-} from "../../services/actions";
-
 export default function App() {
   const navigate = useNavigate();
-  const dispatch = usingDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
-
-  if(location.pathname !== '/feed') {
-    dispatch({type: FEED_WS_CONNECTION_STOP})
-  };
-
-  if(location.pathname !== '/profile/orders') {
-    dispatch({type: PROFILE_ORDERS_WS_CONNECTION_STOP})
-  };
 
   const background = location.state && location.state.background;
 
@@ -61,8 +48,8 @@ export default function App() {
 
   useEffect(() => dispatch(checkUserAuth()), []);
 
-  const userLoaderActive = usingSelector(store => store.userData.loaderActive);
-  const orderLoaderActive = usingSelector(store => store.orderData.loaderActive);
+  const userLoaderActive = useAppSelector(store => store.userData.loaderActive);
+  const orderLoaderActive = useAppSelector(store => store.orderData.loaderActive);
 
   return (
     <>

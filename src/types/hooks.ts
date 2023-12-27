@@ -15,10 +15,10 @@ export type ThunkApiConfig = {
 };
 
 type DispatchFunc = () => AppDispatch;
-export const usingDispatch: DispatchFunc = useDispatch;
-export const usingSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppDispatch: DispatchFunc = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export type useFormProps = {
+export type UseFormProps = {
     name?: string,
     email?: string,
     password?: string
