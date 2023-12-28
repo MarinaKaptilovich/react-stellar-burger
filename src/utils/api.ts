@@ -11,47 +11,47 @@ import { ChangeUserType } from "../types/user";
 
 const BASE_URL = 'https://norma.nomoreparties.space/api';
 
-const api = {
-  ingredientsUrl: 'https://norma.nomoreparties.space/api/ingredients',
-  orderUrl: 'https://norma.nomoreparties.space/api/orders'
-};
-
 function checkResult(res:Response) {
   return res.ok ? res.json() : res.json().then((err:any) => Promise.reject(err));
 };
 
 function request<T>(url: string, params: RequestInit) : Promise<T> {
   return fetch(url, params)
-    .then(res => {
-      if(!res.ok) {
-        return Promise.reject(`Ошибка`);
-      }
-      return res.json() as Promise<T>
-    })
+    .then(res => checkResult(res))
 };
 
-const headers = new Headers();
-headers.append('Content-Type', 'application/json');
-headers.append('authorization', localStorage.getItem('accessToken') ?? 'Error');
+const getHeaders = () => {
+  const headers = new Headers();
+
+  const accessToken = localStorage.getItem('accessToken')
+
+  headers.append('Content-Type', 'application/json');
+
+  if (accessToken) {
+    headers.append('authorization', accessToken);
+  }
+
+  return headers
+}
 
 export async function getIngredients() : Promise<IngredientType[]> {
-  const res = await fetch(api.ingredientsUrl)
+  const res = await fetch(BASE_URL + `/ingredients`)
   const result = await checkResult(res)
   return result.data
 };
 
 export function createOrder(ingredients:string[]) {
-  return request<OrderType>(api.orderUrl, {
+  return request<OrderType>(BASE_URL + `/orders`, {
     method: 'POST',
     body: JSON.stringify({ ingredients }),
-    headers: headers
+    headers: getHeaders()
   });
 };
 
 export function getOrder(number: string) {
-  return request<RequestGetOrderType>(`${api.orderUrl}/${number}`, { 
+  return request<RequestGetOrderType>(BASE_URL + `/orders/${number}`, { 
     method: 'GET',
-    headers: headers
+    headers: getHeaders()
   })
 };
 
@@ -132,7 +132,7 @@ export function requestLogout() {
 export function requestGetUser() {
   return request<RequestGetUserType>(BASE_URL + `/auth/user`, {
     method: 'GET',
-    headers: headers
+    headers: getHeaders()
   });
 };
 
@@ -167,7 +167,7 @@ export function requestChangeUser(data: ChangeUserType) {
       email: data.email,
       password: data.password
     }),
-    headers: headers
+    headers: getHeaders()
   });
 };
 

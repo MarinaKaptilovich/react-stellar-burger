@@ -54,19 +54,9 @@ export const socketMiddleware = (wsConfig: WsConfigType) : Middleware<{}, RootSt
               let data = JSON.parse(event.data)
               if(data.message === 'Invalid or missing token') {
                 requestRefreshToken()
-                      .then((res) => {
-                        localStorage.setItem("refreshToken", res.refreshToken);
-                        localStorage.setItem("accessToken", res.accessToken);
-                      })
-                      .then(() => {
-                        let token = localStorage.getItem('accessToken')
-                        dispatch({
-                          type: 'onStart',
-                          payload: {
-                            url: 'wss://norma.nomoreparties.space/orders',
-                            token: token ? token.split('Bearer ')[1] : '' 
-                          }
-                        });
+                      .then(({ refreshToken, accessToken }) => {
+                        localStorage.setItem("refreshToken", refreshToken);
+                        localStorage.setItem("accessToken", accessToken);
                       })
                       .catch((err) => {
                         return Promise.reject(err)
