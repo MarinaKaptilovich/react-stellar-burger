@@ -1,11 +1,16 @@
 .main {
-    width: 1242px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+.section {
+    width: 1244px;
+    display: flex;
     padding-top: 120px;
     gap: 60px;
+
 }
 
 .sidebar {
